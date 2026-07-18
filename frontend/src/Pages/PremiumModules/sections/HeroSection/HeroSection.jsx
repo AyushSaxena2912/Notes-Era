@@ -35,7 +35,8 @@ const HeroSection = () => {
         </p>
 
         <h1 className={styles.headline}>
-          Notes-Era 2.0{" "}
+          Notes-Era 2.0
+          <br className={styles.titleBreak} />{" "}
           <span className={styles.accentWord}>is Here</span>
         </h1>
 

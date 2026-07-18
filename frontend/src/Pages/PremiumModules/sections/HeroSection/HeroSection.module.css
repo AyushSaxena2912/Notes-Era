@@ -158,6 +158,11 @@
   -webkit-text-fill-color: transparent;
 }
 
+/* Desktop: keep "Notes-Era 2.0 is Here" on one line */
+.titleBreak {
+  display: none;
+}
+
 .sub {
   margin: 0 !important;
   margin-top: -8px !important;
@@ -362,6 +367,11 @@
   .headline {
     white-space: normal;
     font-size: clamp(32px, 10vw, 44px) !important;
+  }
+
+  /* Mobile: Notes-Era 2.0 / is Here */
+  .titleBreak {
+    display: block;
   }
 
   .actions {

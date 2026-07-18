@@ -37,9 +37,14 @@
 }
 
 .brand img {
-  height: 28px;
+  height: 36px;
   width: auto;
   display: block;
+  filter:
+    brightness(1.28)
+    contrast(1.18)
+    drop-shadow(0 0 12px rgba(192, 132, 252, 0.55))
+    drop-shadow(0 0 2px rgba(255, 255, 255, 0.35));
 }
 
 .nav {
@@ -366,7 +371,7 @@
   }
 
   .brand img {
-    height: 30px;
+    height: 40px;
   }
 
   .nav {
