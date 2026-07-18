@@ -108,7 +108,7 @@ const OrdersPage = () => {
   return (
     <div className={styles.page}>
       <Header />
-      <main className={`container ${styles.main}`}>
+      <main className={styles.main}>
         <header className={styles.header}>
           <div className={styles.headerTop}>
             <div>
