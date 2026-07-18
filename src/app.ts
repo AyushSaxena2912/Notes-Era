@@ -14,7 +14,8 @@ import { connectDB } from "./config/mongodb.config";
 import { errorHandler } from "./middleware/error.middleware";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
+const HOST = "0.0.0.0";
 
 app.use(
   cors({
@@ -52,13 +53,20 @@ app.use("/api/payment", paymentRouter);
 
 app.use(errorHandler);
 
-connectDB().then(() => {
-  const server = app.listen(PORT, () => {
-    console.log(`Server is running on port: ${PORT}.`);
-  });
+// Railway needs the process listening on 0.0.0.0:$PORT immediately.
+// Do not wait for Mongo before bind — that causes "Application failed to respond".
+const server = app.listen(PORT, HOST, () => {
+  console.log(`Server is running on http://${HOST}:${PORT}`);
+});
 
-  process.on("unhandledRejection", (error) => {
-    console.log(`Logged Error: ${error}.`);
-    server.close(() => process.exit());
-  });
+connectDB().catch((err) => {
+  console.error("MongoDB connection failed:", err);
+});
+
+process.on("unhandledRejection", (error) => {
+  console.error(`Unhandled rejection: ${error}`);
+});
+
+process.on("SIGTERM", () => {
+  server.close(() => process.exit(0));
 });
