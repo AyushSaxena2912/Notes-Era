@@ -192,15 +192,36 @@
   text-align: center !important;
 }
 
+.descDesktop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.descMobile {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
 .descLine {
   display: block;
   white-space: nowrap;
 }
 
 @media screen and (max-width: 700px) {
+  .descDesktop {
+    display: none;
+  }
+
+  .descMobile {
+    display: flex;
+  }
+
   .descLine {
-    white-space: normal;
-    max-width: 34ch;
+    white-space: nowrap;
   }
 }
 

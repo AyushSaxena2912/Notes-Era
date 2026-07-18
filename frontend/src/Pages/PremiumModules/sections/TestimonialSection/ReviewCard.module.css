@@ -50,9 +50,9 @@
   place-items: center;
   overflow: hidden;
   color: #fff;
-  box-shadow:
-    0 0 0 2px rgba(141, 108, 252, 0.35),
-    0 0 14px rgba(141, 108, 252, 0.25);
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .initials {

@@ -54,12 +54,25 @@ const HeroSection = () => {
         </div>
 
         <p className={styles.desc}>
-          <span className={styles.descLine}>
-            Premium study materials specially designed for B.Tech CSE/IT
-            students,
+          <span className={styles.descDesktop}>
+            <span className={styles.descLine}>
+              Premium study materials specially designed for B.Tech CSE/IT
+              students,
+            </span>
+            <span className={styles.descLine}>
+              enabling focused learning and stress-free exam preparation.
+            </span>
           </span>
-          <span className={styles.descLine}>
-            enabling focused learning and stress-free exam preparation.
+          <span className={styles.descMobile}>
+            <span className={styles.descLine}>
+              Premium study materials specially designed for B.Tech
+            </span>
+            <span className={styles.descLine}>
+              CSE/IT students, enabling focused learning
+            </span>
+            <span className={styles.descLine}>
+              and stress-free exam preparation.
+            </span>
           </span>
         </p>
 
