@@ -45,6 +45,16 @@ const cashfreeFetch = async (path: string, init?: RequestInit) => {
   return data;
 };
 
+/** Cashfree production rejects non-https return_url. */
+const getCashfreeReturnBase = () => {
+  const configured = (process.env.FRONTEND_URL || "").replace(/\/$/, "");
+  if (getCashfreeEnv() === "production") {
+    if (configured.startsWith("https://")) return configured;
+    return "https://notes-era.vercel.app";
+  }
+  return configured || "http://localhost:3001";
+};
+
 const createCashfreeOrder = async ({
   orderId,
   amountRupees,
@@ -52,10 +62,7 @@ const createCashfreeOrder = async ({
   orderNote,
   returnUrl,
 }: CreateCashfreeOrderInput) => {
-  const frontendUrl = (process.env.FRONTEND_URL || "http://localhost:3001").replace(
-    /\/$/,
-    "",
-  );
+  const frontendUrl = getCashfreeReturnBase();
   const resolvedReturnUrl =
     returnUrl ||
     `${frontendUrl}/orders?order_id={order_id}&gateway=cashfree`;
