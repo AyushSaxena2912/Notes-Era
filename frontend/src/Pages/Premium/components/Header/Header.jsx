@@ -18,9 +18,6 @@ const Header = () => {
               <a href="/">Home</a>
             </li>
             <li>
-              <a href="/videosection">Explore Videos</a>
-            </li>
-            <li>
               <a href="mailto:noteseraa@gmail.com">Contact Us</a>
             </li>
           </ul>

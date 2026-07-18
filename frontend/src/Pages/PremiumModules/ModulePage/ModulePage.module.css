@@ -1,29 +1,22 @@
+.container {
+  --heading-1-color: #c084fc;
+  --default-text-color: #f4f4f5;
+  --para-color: #a1a1aa;
+  color: #e4e4e7;
+  background: transparent;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+  overflow: visible;
+}
+
+.container main {
+  overflow: visible;
+}
+
 .container h1,
 .container h2,
 .container p {
   text-align: start;
   padding: 0;
   margin: 0;
-}
-
-.container h1 {
-  color: var(--heading-1-color);
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.container h2 {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.container p {
-  font-size: 16px;
-  font-weight: 200;
-}
-
-@media screen and (min-width: 500px) {
-  .container h2 {
-    font-size: 32px;
-  }
 }

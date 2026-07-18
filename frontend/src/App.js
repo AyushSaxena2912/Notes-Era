@@ -1,26 +1,29 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./Pages/Home/Home.js";
 import Courses from "./Pages/Courses/Courses.js";
 import SignUp from "./Pages/SignUp/SignUp";
 import Login from "./components/Login/Login";
 import Dashboard from "./components/Dashboard/dashboard";
 import AddData from "./components/AddData/AddData";
 import EditData from "./components/Edit/EditData";
-import VideoSection from "./Pages/videoSectionSearch/videosection.jsx";
-import PlaycourseVideos from "./Pages/playVideoSection/playcoursevideos.jsx";
-import "./Pages/playVideoSection/components/UnitDesc/unitdesc.css";
 import Privacypolicy from "./Pages/privacypolicy/Privacypolicy.jsx";
 import Termsandconditions from "./Pages/TermsAndConditions/Terms.jsx";
-import VideoLogin from "./Pages/VideoDashboard/videoLogin/VideoLogin.jsx";
-import VideoDashboard from "./Pages/VideoDashboard/dashboard/VideoDashboard.jsx";
 import Premium from "./Pages/Premium/Premium.jsx";
-import { checkNotesAuthLoader, checkVideoAuthLoader } from "./utils/auth.js";
-import HackerBhai from "./Pages/BlankPage/HackerBhai.js";
+import { checkNotesAuthLoader } from "./utils/auth.js";
+import { requireStudentAuthLoader } from "./utils/studentAuth.js";
 import PremiumModulesPage from "./Pages/PremiumModules/PremiumModulesPage.jsx";
 import ModulePage from "./Pages/PremiumModules/ModulePage/ModulePage.jsx";
-// import axios from 'axios';
+import LoginPage from "./Pages/PremiumModules/Auth/LoginPage.jsx";
+import SignupPage from "./Pages/PremiumModules/Auth/SignupPage.jsx";
+import CheckEmailPage from "./Pages/PremiumModules/Auth/CheckEmailPage.jsx";
+import VerifyEmailPage from "./Pages/PremiumModules/Auth/VerifyEmailPage.jsx";
+import OrdersPage from "./Pages/PremiumModules/Orders/OrdersPage.jsx";
+import ProfilePage from "./Pages/PremiumModules/Profile/ProfilePage.jsx";
+import { wakeBackend } from "./utils/modules.js";
+
+// Wake Render free tier as soon as app boots (reduces cold-start wait later)
+wakeBackend();
 
 function App() {
   const router = createBrowserRouter([
@@ -29,8 +32,35 @@ function App() {
       element: <PremiumModulesPage />,
     },
     {
+      path: "/login",
+      element: <LoginPage />,
+    },
+    {
+      path: "/signup",
+      element: <SignupPage />,
+    },
+    {
+      path: "/check-email",
+      element: <CheckEmailPage />,
+    },
+    {
+      path: "/verify-email",
+      element: <VerifyEmailPage />,
+    },
+    {
+      path: "/orders",
+      element: <OrdersPage />,
+      loader: requireStudentAuthLoader,
+    },
+    {
+      path: "/profile",
+      element: <ProfilePage />,
+      loader: requireStudentAuthLoader,
+    },
+    {
       path: "/courses",
       element: <Courses />,
+      loader: requireStudentAuthLoader,
     },
     {
       path: "/signup9875",
@@ -39,10 +69,6 @@ function App() {
     {
       path: "/noteslogin",
       element: <Login />,
-    },
-    {
-      path: "/hacker-Samajne-wale-ke-liye-msg",
-      element: <HackerBhai />,
     },
     {
       path: "/noteslogin/dashboard",
@@ -60,23 +86,6 @@ function App() {
       loader: checkNotesAuthLoader,
     },
     {
-      path: "/videologin",
-      element: <VideoLogin />,
-    },
-    {
-      path: "/video/dashboard",
-      element: <VideoDashboard />,
-      loader: checkVideoAuthLoader,
-    },
-    {
-      path: "/videosection",
-      element: <VideoSection />,
-    },
-    {
-      path: "/playcoursevideo/:id/:name",
-      element: <PlaycourseVideos />,
-    },
-    {
       path: "/privacypolicy",
       element: <Privacypolicy />,
     },
@@ -88,10 +97,6 @@ function App() {
       path: "/premium",
       element: <Premium />,
     },
-    // {
-    // path: "/premium-modules",
-    // element: <PremiumModulesPage />,
-    // },
     {
       path: "/premium-modules/:repoId/:moduleSlug",
       element: <ModulePage />,

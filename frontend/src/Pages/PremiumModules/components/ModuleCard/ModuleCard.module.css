@@ -1,89 +1,195 @@
-.card,
-.card:hover,
-.card:active,
-.card:visited {
-  color: var(--para-color);
-}
-
 .card {
-  --price-color: #3fc89e !important;
   width: 100%;
-  height: 640px;
-  margin: 0 auto;
-  padding: 16px 16px 20px;
-  border-radius: 8px;
+  background: #1a1a1d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
-.card img {
-  width: 325px;
-  height: 440px;
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+  border-color: rgba(168, 85, 247, 0.28);
 }
 
-.card h2 span {
-  font-size: 16px;
+.coverLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: #000000 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.card h2 svg {
-  font-size: 14px;
-  line-height: 100%;
-  transform: translateY(3px);
+.cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: #000000 !important;
 }
 
-.card .textContainer .para {
-  font-size: 14px;
-  line-height: 130%;
-  font-weight: 500;
-  margin-bottom: 3px;
+.cover img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain !important;
+  object-position: center;
+  display: block;
 }
 
-.card .textContainer .priceContainer p {
-  font-size: 20px;
-  font-weight: 700;
-  width: fit-content;
-}
-
-.card .textContainer .priceContainer .oldPrice div {
+.badge {
   position: absolute;
-  width: 100%;
-  height: 2px;
-  top: 45%;
-  background: var(--para-color);
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  background: #7c3aed;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 5px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
-.card .textContainer .price {
-  color: var(--price-color);
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  flex: 1;
 }
 
-.card .textContainer p.totalRatingsPara {
-  font-size: 14px;
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.card .textContainer .ratingsContainer {
+.title {
+  color: #f4f4f5;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.title:hover {
+  color: #c084fc;
+}
+
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.ratingValue {
   font-size: 12px;
+  font-weight: 700;
+  color: #c084fc;
 }
 
-.card .textContainer p.ratingPara {
-  font-size: 14px;
-  transform: translateY(2px);
-  color: var(--price-color);
+.stars {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  color: #a855f7;
+  font-size: 11px;
 }
 
-.ratings {
-  color: #ffa033;
+.reviews {
+  color: #a1a1aa;
+  font-size: 12px;
+  text-decoration: none;
 }
 
-@media screen and (min-width: 430px) {
-  .card {
-    width: 364px;
-  }
-  .card h2 span {
-    font-size: 20px;
-  }
-  .card h2 svg {
-    font-size: 16px;
-    transform: translateY(5px);
-  }
-  .card .textContainer .para {
-    font-size: 16px;
-  }
+.reviews:hover {
+  color: #c084fc;
+  text-decoration: underline;
+}
+
+.priceBlock {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.mrp {
+  font-size: 13px;
+  color: #71717a;
+  text-decoration: line-through;
+}
+
+.discount {
+  font-size: 12px;
+  font-weight: 600;
+  color: #22c55e;
+}
+
+.cartBtn {
+  margin-top: auto;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: #8b5cf6;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 11px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.15s ease;
+}
+
+.cartBtn:hover {
+  background: #7c3aed;
+}
+
+.cartBtnAdded {
+  background: #2e1065;
+  color: #e9d5ff;
+}
+
+.cartBtnAdded:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.removeLabel {
+  display: none;
+}
+
+.cartBtnAdded:hover .addedLabel {
+  display: none;
+}
+
+.cartBtnAdded:hover .removeLabel {
+  display: inline;
 }

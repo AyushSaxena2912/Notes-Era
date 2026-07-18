@@ -70,8 +70,6 @@
 ================================================== */
 /* 1.1 - Template Fonts - Start
 ================================================== */
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 /* 1.1 - Template Fonts - End
 ================================================== */
 /* 1.2 - Template Global Reset - Start
@@ -84,7 +82,7 @@ body {
   line-height: 1.65;
   font-style: normal;
   color: #29281e;
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
   text-rendering: optimizelegibility;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -172,7 +170,7 @@ h5,
 h6 {
   font-weight: 700;
   color: #1f1d0d;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 hr {
@@ -526,7 +524,7 @@ hr {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .btn_unfill .btn_icon {
   width: 24px;
@@ -695,7 +693,7 @@ ol[type="1"] > li:not(:last-child) {
   color: #1f1d0d;
   padding: 12px 16px;
   text-transform: uppercase;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
   border-radius: 8px;
   background-color: #ffffff;
 }
@@ -721,7 +719,7 @@ ol[type="1"] > li:not(:last-child) {
   padding: 7px 12px;
   color: #1f1d0d;
   text-transform: uppercase;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
   background-color: #f6f6f6;
 }
 .item_category_list a:hover {
@@ -790,7 +788,7 @@ blockquote p {
   font-size: 22px;
   font-weight: 700;
   line-height: 25px;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 /* 2.8 - Typography - End
@@ -1030,7 +1028,7 @@ blockquote p {
   line-height: 24px;
   -webkit-transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .video_play_btn.text-white .icon {
@@ -1151,7 +1149,7 @@ blockquote p {
   line-height: 16px;
   color: #1f1d0d;
   margin-bottom: 6px;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 :-moz-placeholder {
@@ -1285,7 +1283,7 @@ blockquote p {
   line-height: 16px;
   padding: 10px 16px;
   text-transform: uppercase;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
   border-radius: 8px;
   border: 2px solid #d2d2d2;
   -webkit-transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
@@ -1419,7 +1417,7 @@ blockquote p {
   font-size: 65px;
   font-weight: 800;
   line-height: 68px;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
   -webkit-text-fill-color: white;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #1f1d0d;
@@ -1509,7 +1507,7 @@ blockquote p {
   box-shadow: none;
   line-height: 32px;
   color: #1f1d0d;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
   background-color: transparent;
 }
 .accordion .accordion-button:after {
@@ -1688,7 +1686,7 @@ blockquote p {
   font-size: 45px;
   font-weight: 700;
   line-height: 50px;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .deals_countdown .discount_value span {
   font-size: 14px;
@@ -1724,14 +1722,14 @@ blockquote p {
   font-weight: 700;
   line-height: 50px;
   position: absolute;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .countdown_timer strong {
   display: block;
   font-size: 45px;
   font-weight: 700;
   line-height: 50px;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .countdown_timer span {
   display: block;
@@ -1810,7 +1808,7 @@ blockquote p {
   line-height: 24px;
   position: absolute;
   color: #1f1d0d;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .comment_item .reply_btn i {
   margin-left: 5px;
@@ -2121,14 +2119,14 @@ blockquote p {
   margin-bottom: 10px;
   -webkit-transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .course_small_layout .item_title:hover {
   opacity: 0.8;
 }
 .course_small_layout .item_price {
   color: #1f1d0d;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .course_small_layout .item_price del {
   opacity: 0.8;
@@ -2188,7 +2186,7 @@ blockquote p {
   font-weight: 700;
   line-height: 32px;
   color: #1f1d0d;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .course_card .item_price .remove_price {
   font-size: 14px;
@@ -2261,7 +2259,7 @@ blockquote p {
   font-weight: 600;
   line-height: 24px;
   color: #1f1d0d;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .filter_buttons_list {
@@ -2286,7 +2284,7 @@ blockquote p {
   -ms-flex-pack: center;
   justify-content: center;
   text-transform: uppercase;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
   border-radius: 8px;
   background-color: #f6f6f6;
   border: 2px solid #d2d2d2;
@@ -2305,7 +2303,7 @@ blockquote p {
   font-weight: 600;
   padding: 0 30px 0 20px;
   text-transform: uppercase;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
   background-color: #f6f6f6;
 }
 
@@ -2443,7 +2441,7 @@ blockquote p {
   display: -ms-flexbox;
   display: flex;
   color: #1f1d0d;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .popular_event_list ul > li:not(:last-child) {
   margin-bottom: 20px;
@@ -2485,7 +2483,7 @@ blockquote p {
   color: #444444;
   font-size: 16px;
   line-height: 24px;
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .popular_event_list ul .event_name strong {
   font-weight: 500;
@@ -2596,7 +2594,7 @@ blockquote p {
 .pricing_card .pricing_wrap {
   color: #0e081e;
   font-weight: 800;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .pricing_card .pricing_wrap sub,
 .pricing_card .pricing_wrap sup {
@@ -2620,7 +2618,7 @@ blockquote p {
   padding-top: 5px;
   font-weight: 400;
   line-height: 20px;
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .pricing_card hr {
   margin: 30px 0;
@@ -2748,7 +2746,7 @@ blockquote p {
   font-weight: 400;
   line-height: 20px;
   margin-bottom: 5px;
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .testimonial_item .testimonial_name {
   font-size: 13px;
@@ -2802,7 +2800,7 @@ blockquote p {
   line-height: 32px;
   color: #1f1d0d;
   margin-bottom: 15px;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .testimonial_item_2 p {
   font-size: 16px;
@@ -2810,7 +2808,7 @@ blockquote p {
   line-height: 24px;
   color: #29281e;
   margin-bottom: 30px;
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .testimonial_item_2 .testimonial_admin {
   display: -webkit-box;
@@ -2833,7 +2831,7 @@ blockquote p {
   font-weight: 500;
   line-height: 24px;
   margin-bottom: 5px;
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .testimonial_item_2 .testimonial_designation {
   display: block;
@@ -2935,7 +2933,7 @@ blockquote p {
   line-height: 22px;
   color: #1f1d0d;
   margin-bottom: 8px;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .blog_small .item_post_date {
   line-height: 1;
@@ -3278,7 +3276,7 @@ blockquote p {
   display: -ms-inline-flexbox;
   display: inline-flex;
   padding: 9px 20px 8px;
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
   border-radius: 8px;
 }
 .main_menu_list > li:hover > a,
@@ -3497,7 +3495,7 @@ blockquote p {
 }
 .page_banner .item_price {
   line-height: 1;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .page_banner .item_price .remove_price {
   font-size: 24px;
@@ -3577,7 +3575,7 @@ blockquote p {
   color: #1f1d0d;
   position: relative;
   padding-right: 20px;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .sidebar .widget_title:before {
   top: 2px;
@@ -3716,7 +3714,7 @@ blockquote p {
   font-size: 28px;
   font-weight: 700;
   line-height: 32px;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .course_info_card .btn {
   width: 100%;
@@ -3802,7 +3800,7 @@ blockquote p {
   line-height: 20px;
   color: #29281e;
   margin-bottom: 15px;
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .blog_author .blog_author_link {
   top: 0;
@@ -3858,7 +3856,7 @@ blockquote p {
   font-weight: 600;
   line-height: 24px;
   color: #1f1d0d;
-  font-family: "Barlow", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 .prevnext_post_wrap .post_item strong:hover {
   opacity: 0.8;

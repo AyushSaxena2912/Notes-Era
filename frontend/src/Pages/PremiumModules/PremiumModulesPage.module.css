@@ -1,14 +1,17 @@
 :root {
-  --para-color: #667085;
-  --default-text-color: #101828;
-  --primary-text-color: #1a906b;
-  --heading-1-color: #20b486;
-  --secondary-text-color: #667085;
-  --secondary-green-color: #4ac8ae;
+  --para-color: #a1a1aa;
+  --default-text-color: #f4f4f5;
+  --primary-text-color: #c084fc;
+  --heading-1-color: #c084fc;
+  --secondary-text-color: #a1a1aa;
+  --secondary-accent-color: #a855f7;
+  --page-bg: #050507;
 }
 
 .container {
   color: var(--default-text-color);
+  background: transparent;
+  min-height: 100vh;
 }
 
 .container h1,
@@ -19,15 +22,10 @@
   margin: 0;
 }
 
-.container h1 {
-  color: var(--heading-1-color);
-  font-size: 16px;
-  font-weight: 600;
-}
-
 .container h2 {
   font-size: 20px;
   font-weight: 600;
+  color: #f4f4f5;
 }
 
 .container p {

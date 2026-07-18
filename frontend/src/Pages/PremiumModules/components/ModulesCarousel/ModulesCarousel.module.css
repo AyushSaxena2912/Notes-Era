@@ -1,0 +1,99 @@
+.wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.header {
+  min-width: 0;
+  flex: 1;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.navBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  background: rgba(139, 92, 246, 0.22);
+  color: #f4f4f5;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.navBtn:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.38);
+  border-color: #a855f7;
+}
+
+.navBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 60px) / 4);
+  gap: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 2px 0 6px;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.track > * {
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+@media screen and (max-width: 1199px) {
+  .track {
+    grid-auto-columns: calc((100% - 40px) / 3);
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .track {
+    grid-auto-columns: calc((100% - 20px) / 2);
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .track {
+    grid-auto-columns: 85%;
+  }
+
+  .navBtn {
+    width: 36px;
+    height: 36px;
+  }
+}

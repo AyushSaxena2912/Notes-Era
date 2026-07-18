@@ -1,63 +1,73 @@
+.container {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: transparent;
+}
+
 .background {
-  position: absolute;
-  top: -10px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #f5f5f5;
-  border-radius: 0 0 50% 50%/0 0 100% 100%;
-  transform: scaleX(4);
-  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 60%));
-  z-index: 1;
+  display: none;
 }
 
 .nestedRings1 {
   transform: rotate(-50deg);
-  top: 14%;
+  top: 10%;
+  left: -80px;
+  opacity: 0.45;
 }
 
 .nestedRings2 {
-  right: -20px;
-  bottom: 12%;
+  right: -100px;
+  bottom: 8%;
   transform: rotate(-110deg);
+  opacity: 0.35;
 }
 
 .greenGradient1 {
-  top: -15%;
-  right: -15%;
+  top: -10%;
+  right: -12%;
 }
 
 .greenGradient2 {
-  top: 40%;
-  left: -15%;
+  top: 45%;
+  left: -18%;
 }
 
 .gradientContainer {
   position: absolute;
-  z-index: 1;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .greenGradBox {
-  width: 400px;
-  height: 400px;
+  width: 420px;
+  height: 420px;
   border-radius: 50%;
-  background: rgb(36, 187, 134);
   background: radial-gradient(
     circle,
-    rgba(36, 187, 134, 0.3) 0%,
-    rgba(36, 187, 134, 0) 60%
+    rgba(124, 58, 237, 0.28) 0%,
+    rgba(124, 58, 237, 0) 62%
   );
+}
+
+.gradientBoxBlur {
+  position: absolute;
+  inset: 40px;
+  border-radius: 50%;
+  filter: blur(40px);
+  background: rgba(168, 85, 247, 0.12);
 }
 
 .nestedRings {
   position: absolute;
-  width: 400px !important;
-  height: 400px !important;
-  z-index: 1;
+  width: 380px !important;
+  height: 380px !important;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .nestedRing {
-  border: 1px solid #20b48640;
+  border: 1px solid rgba(168, 85, 247, 0.18);
   width: 100%;
   height: 100%;
   padding: 40px;
@@ -66,34 +76,15 @@
 
 .ringsEllipse {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #606060;
-  top: -5px;
+  background: #a855f7;
+  top: -4px;
   left: 50%;
+  opacity: 0.7;
 }
 
 .greenEllipse {
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  background: #20b486;
-  opacity: 0.6;
-  border-radius: 50%;
-  z-index: -1;
-  top: -20px;
-  left: 10px;
-}
-
-@media screen and (min-width: 1068px) {
-  .background {
-    transform: scaleX(3);
-  }
-}
-
-@media screen and (min-width: 1400px) {
-  .background {
-    transform: scaleX(2);
-  }
+  display: none;
 }

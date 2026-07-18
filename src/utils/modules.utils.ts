@@ -1,4 +1,5 @@
 import Modules, { ModulesType } from "../models/modules.model";
+import { normalizeDriveFileId } from "./drive.utils";
 
 const getModules = async (): Promise<ModulesType[]> => {
   const modules = await Modules.find({});
@@ -25,7 +26,7 @@ const getAmount = async (slug: string) => {
 
 const getFileId = async (productId: string) => {
   const result = await Modules.findOne({ slug: productId });
-  return result?.fileId;
+  return normalizeDriveFileId(result?.fileId);
 };
 
 export { getModules, getModulesByRepoId, getAmount, getFileId };

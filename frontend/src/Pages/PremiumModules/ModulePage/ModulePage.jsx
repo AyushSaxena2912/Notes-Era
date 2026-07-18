@@ -4,7 +4,9 @@ import Header from "../components/Header/Header";
 import HeroSection from "./sections/HeroSection/HeroSection";
 import Footer from "../components/Footer/Footer";
 import RelatedModulesSection from "./sections/RelatedModulesSection/RelatedModulesSection";
+import AccessFAQSection from "./sections/AccessFAQSection/AccessFAQSection";
 import { fetchRepo } from "../../../utils/modules";
+import { extractCollege } from "../utils/moduleFilters";
 import styles from "./ModulePage.module.css";
 
 const ModulePage = () => {
@@ -21,20 +23,21 @@ const ModulePage = () => {
   }, [fetchAndSetRepo]);
 
   return (
-    <div className={`${styles.container} overflow-hidden`}>
+    <div className={styles.container}>
       <Header />
-      <main className="overflow-hidden">
+      <main>
         {repo ? (
           <>
             <HeroSection
-              className="mb-5"
-              module={repo.modules.find((module) => module.slug === moduleSlug)}
+              module={repo.modules.find(
+                (module) => module.slug === moduleSlug,
+              )}
+              college={extractCollege(repo.about)}
             />
+            <AccessFAQSection />
             <RelatedModulesSection repo={repo} slug={moduleSlug} />
           </>
-        ) : (
-          ""
-        )}
+        ) : null}
       </main>
       <Footer />
     </div>

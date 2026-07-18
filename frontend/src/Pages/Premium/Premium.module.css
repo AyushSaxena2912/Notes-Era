@@ -1,6 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700;800;900&display=swap");
 * {
-  font-family: "Lato";
+  font-family: "Inter", sans-serif;
 }
 
 @keyframes bounce {
@@ -33,7 +32,7 @@
 .wrapper {
   position: relative;
   overflow: hidden;
-  background: var(--background-color);
+  background: transparent;
 }
 
 .wrapper section h1 {
@@ -46,7 +45,7 @@
   backdrop-filter: blur(75px);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   color: var(--secondary-f-color);
-  font-family: "Lato";
+  font-family: "Inter", sans-serif;
   font-size: 1rem;
   position: relative;
   z-index: 1;

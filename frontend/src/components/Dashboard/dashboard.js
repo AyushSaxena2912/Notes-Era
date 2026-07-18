@@ -43,7 +43,7 @@ const Dashboard = () => {
       } catch (error) {
         // Handle errors, e.g., display an error message
         console.error('Error deleting data:', error);
-        navigate('/hacker-Samajne-wale-ke-liye-msg');
+        navigate('/noteslogin');
       }
     }
   };

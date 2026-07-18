@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@lottiefiles/dotlottie-react": "^0.19.10",
     "@react-oauth/google": "^0.12.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -51,5 +52,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://notesera-backend.onrender.com/"
+  "proxy": "http://localhost:4000"
 }

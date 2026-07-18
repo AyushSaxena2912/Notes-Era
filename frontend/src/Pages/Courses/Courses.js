@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import './Courses.css';
-import axios from 'axios';
-import Select from 'react-select';
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css'
+import React, { useEffect, useState } from "react";
+import "./Courses.css";
+import Select from "react-select";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { authFetch } from "../../utils/studentAuth";
 /* eslint-disable react-hooks/exhaustive-deps */
+
 function Courses() {
-  const[submitbuttonclicked,setSubjectbutton]=useState(false);
+  const [submitbuttonclicked, setSubjectbutton] = useState(false);
   const [isLoadingColleges, setIsLoadingColleges] = useState(true);
   const [colleges, setColleges] = useState([]);
   const [years, setYears] = useState([]);
@@ -15,61 +16,71 @@ function Courses() {
   const [selectedCollege, setSelectedCollege] = useState(null);
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
-  const BASE_URL='https://notesera-back-end.onrender.com'
+  const [error, setError] = useState("");
+
   const fetchColleges = async () => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/data/all/colleges`
-      );
-      const collegeData = response.data.map((college) => ({
+      const { response, data } = await authFetch("/free-notes/colleges");
+      if (!response.ok) {
+        setError(data?.message || "Could not load colleges.");
+        setIsLoadingColleges(false);
+        return;
+      }
+      const list = Array.isArray(data) ? data : data?.body || [];
+      const collegeData = list.map((college) => ({
         value: college,
         label: college,
       }));
       setColleges(collegeData);
-      setIsLoadingColleges(false); // Set loading to false when data is loaded
-    } catch (error) {
-      console.error('Error fetching colleges:', error);
+      setIsLoadingColleges(false);
+    } catch (err) {
+      console.error("Error fetching colleges:", err);
+      setError("Could not load colleges.");
+      setIsLoadingColleges(false);
     }
   };
 
   useEffect(() => {
-    // Fetch college data from the API
     fetchColleges();
   }, []);
 
-
   const handleCollegeChange = (selectedOption) => {
     setSelectedCollege(selectedOption);
-
-    // Fetch years for the selected college from the API
-    axios.get(`${BASE_URL}/data/all/${selectedOption.value}/years`)
-      .then(response => {
-        const yearData = response.data.map(year => ({
-          value: year,
-          label: year,
-        }));
-        setYears(yearData);
+    setSelectedYear(null);
+    setSelectedType(null);
+    setSubjects([]);
+    authFetch(`/free-notes/${encodeURIComponent(selectedOption.value)}/years`)
+      .then(({ response, data }) => {
+        if (!response.ok) return;
+        const list = Array.isArray(data) ? data : data?.body || [];
+        setYears(
+          list.map((year) => ({
+            value: year,
+            label: year,
+          })),
+        );
       })
-      .catch(error => {
-        console.error('Error fetching years:', error);
-      });
+      .catch((err) => console.error("Error fetching years:", err));
   };
 
   const handleYearChange = (selectedOption) => {
     setSelectedYear(selectedOption);
-
-    // Fetch types for the selected college and year from the API
-    axios.get(`${BASE_URL}/data/all/${selectedCollege.value}/${selectedOption.value}/types`)
-      .then(response => {
-        const typeData = response.data.map(type => ({
-          value: type,
-          label: type,
-        }));
-        setTypes(typeData);
+    setSelectedType(null);
+    setSubjects([]);
+    authFetch(
+      `/free-notes/${encodeURIComponent(selectedCollege.value)}/${encodeURIComponent(selectedOption.value)}/types`,
+    )
+      .then(({ response, data }) => {
+        if (!response.ok) return;
+        const list = Array.isArray(data) ? data : data?.body || [];
+        setTypes(
+          list.map((type) => ({
+            value: type,
+            label: type,
+          })),
+        );
       })
-      .catch(error => {
-        console.error('Error fetching types:', error);
-      });
+      .catch((err) => console.error("Error fetching types:", err));
   };
 
   const handleTypeChange = (selectedOption) => {
@@ -78,70 +89,76 @@ function Courses() {
 
   const fetchSubjects = async () => {
     if (selectedCollege && selectedYear && selectedType) {
-      const link = `${BASE_URL}/data/all/${selectedCollege.value}/${selectedYear.value}/${selectedType.value}/subjects`;
       setSubjectbutton(true);
       try {
-        const response = await axios.get(link);
-        const subjectsData = response.data;
-        console.log(subjectsData);
+        const { response, data } = await authFetch(
+          `/free-notes/${encodeURIComponent(selectedCollege.value)}/${encodeURIComponent(selectedYear.value)}/${encodeURIComponent(selectedType.value)}/subjects`,
+        );
+        if (!response.ok) {
+          setError(data?.message || "Could not load subjects.");
+          setSubjectbutton(false);
+          return;
+        }
+        const subjectsData = Array.isArray(data) ? data : data?.body || [];
         setSubjects(subjectsData);
         setSubjectbutton(false);
-        console.log(subjectsData);
-      } catch (error) {
-        console.error('Error fetching subjects:', error);
+      } catch (err) {
+        console.error("Error fetching subjects:", err);
+        setSubjectbutton(false);
       }
     }
   };
 
-  // Function to open the link associated with a subject
   const openSubjectLink = async (subject) => {
     if (selectedCollege && selectedYear && selectedType && subject) {
-      const link = `${BASE_URL}/data/all/${selectedCollege.value}/${selectedYear.value}/${selectedType.value}/${subject}/links`;
       try {
-        const response = await axios.get(link);
-        const links = response.data;
-        // Check if there are links, and if so, open the first one in a new tab
-        if (links.length > 0) {
-          window.open(links[0].link, '_blank');
+        const { response, data } = await authFetch(
+          `/free-notes/${encodeURIComponent(selectedCollege.value)}/${encodeURIComponent(selectedYear.value)}/${encodeURIComponent(selectedType.value)}/${encodeURIComponent(subject)}/links`,
+        );
+        if (!response.ok) {
+          setError(data?.message || "Could not open notes.");
+          return;
         }
-      } catch (error) {
-        console.error('Error fetching links:', error);
+        const links = Array.isArray(data) ? data : data?.body || [];
+        if (links.length > 0) {
+          window.open(links[0].link, "_blank");
+        }
+      } catch (err) {
+        console.error("Error fetching links:", err);
       }
     }
   };
-
 
   const customSelectStyles = {
     control: (provided) => ({
       ...provided,
-      borderRadius: '8px', // Customize border radius
-      borderColor: '#FFD32B', // Customize border color
-      boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', // Customize box shadow
-      '&:hover': {
-        borderColor: '#e0cd04', // Customize hover border color
+      borderRadius: "8px",
+      borderColor: "#FFD32B",
+      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+      "&:hover": {
+        borderColor: "#e0cd04",
       },
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected ? '#AF69EE' : 'white', // Customize selected option background color
-      color: state.isSelected ? 'white' : 'black', // Customize selected option text color
-      '&:hover': {
-        backgroundColor: '#AF69EE', // Customize hover background color
-        color: 'white', // Customize hover text color
+      backgroundColor: state.isSelected ? "#AF69EE" : "white",
+      color: state.isSelected ? "white" : "black",
+      "&:hover": {
+        backgroundColor: "#AF69EE",
+        color: "white",
       },
     }),
   };
 
-
   return (
-    <div className='main-body'>
+    <div className="main-body">
       <div className="container">
-          <h1>Get Your Notes Here!</h1>
-          <div id="dropdown-container">
-            {isLoadingColleges&&<Skeleton height="40px"/>}
-            {!isLoadingColleges&&
+        <h1>Get Your Notes Here!</h1>
+        {error ? <p style={{ color: "#f87171" }}>{error}</p> : null}
+        <div id="dropdown-container">
+          {isLoadingColleges && <Skeleton height="40px" />}
+          {!isLoadingColleges && (
             <div className="dropdown">
-              {/* <label>College:</label> */}
               <Select
                 value={selectedCollege}
                 onChange={handleCollegeChange}
@@ -149,11 +166,11 @@ function Courses() {
                 placeholder="Select College"
                 styles={customSelectStyles}
               />
-            </div>}
-            {isLoadingColleges&&<Skeleton height="40px"/>}
-            {!isLoadingColleges&&
+            </div>
+          )}
+          {isLoadingColleges && <Skeleton height="40px" />}
+          {!isLoadingColleges && (
             <div className="dropdown">
-              {/* <label>Year:</label> */}
               <Select
                 value={selectedYear}
                 onChange={handleYearChange}
@@ -161,12 +178,11 @@ function Courses() {
                 placeholder="Select Year"
                 styles={customSelectStyles}
               />
-            </div>}
-            {isLoadingColleges&&<Skeleton height="40px"/>}
-            {!isLoadingColleges&&
-  
+            </div>
+          )}
+          {isLoadingColleges && <Skeleton height="40px" />}
+          {!isLoadingColleges && (
             <div className="dropdown">
-              {/* <label>Type:</label> */}
               <Select
                 value={selectedType}
                 onChange={handleTypeChange}
@@ -174,17 +190,20 @@ function Courses() {
                 placeholder="Select Type"
                 styles={customSelectStyles}
               />
-            </div>}
-          </div>
-  
-          <div className="button-div">
-            <button id="submitBtn" onClick={fetchSubjects}>Submit</button>
-          </div>
-  
-          
-          <div className="subjects-container">
-            {submitbuttonclicked && <Skeleton count={5}/>}
-            {!submitbuttonclicked&&subjects.map((subject, index) => (
+            </div>
+          )}
+        </div>
+
+        <div className="button-div">
+          <button id="submitBtn" onClick={fetchSubjects}>
+            Submit
+          </button>
+        </div>
+
+        <div className="subjects-container">
+          {submitbuttonclicked && <Skeleton count={5} />}
+          {!submitbuttonclicked &&
+            subjects.map((subject, index) => (
               <div
                 key={index}
                 className="subject-rectangle"
@@ -193,7 +212,7 @@ function Courses() {
                 {subject}
               </div>
             ))}
-          </div>
+        </div>
       </div>
     </div>
   );

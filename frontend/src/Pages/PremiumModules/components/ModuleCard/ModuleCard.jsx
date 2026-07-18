@@ -1,61 +1,139 @@
-import { MdArrowOutward } from "react-icons/md";
-import { FaStar, FaRegStar } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaStar, FaRegStar, FaStarHalfAlt, FaCheck } from "react-icons/fa";
+import {
+  addToCart,
+  getCart,
+  removeFromCart,
+  subscribeCartItems,
+} from "../../../../utils/cart";
 import styles from "./ModuleCard.module.css";
 
+const DEFAULT_COVER = "/Assets2/Premium-Modules/module-cover.png";
+
 const ModuleCard = ({
-  imgSrc,
+  imgSrc = DEFAULT_COVER,
   link = "/",
   name,
   about,
+  college,
   price,
   oldPrice,
-  rating,
-  totalRatings,
+  rating = 0,
+  totalRatings = 0,
+  repoId,
+  slug,
+  isBestSeller = false,
 }) => {
-  const roundedRating = Math.round(rating);
-  const stars = Array.from({ length: 5 }, (_, index) => index);
+  const itemId = `${repoId}-${slug}`;
+  const [inCart, setInCart] = useState(() =>
+    getCart().some((item) => item.id === itemId),
+  );
+  const coverSrc = imgSrc || DEFAULT_COVER;
+  const discount =
+    oldPrice && price && oldPrice > price
+      ? Math.round(((oldPrice - price) / oldPrice) * 100)
+      : 0;
+
+  useEffect(() => {
+    const sync = (items) =>
+      setInCart(items.some((item) => item.id === itemId));
+    sync(getCart());
+    return subscribeCartItems(sync);
+  }, [itemId]);
+
+  const handleCartToggle = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (inCart) {
+      removeFromCart(itemId);
+      return;
+    }
+    addToCart({
+      id: itemId,
+      name,
+      about,
+      college,
+      price,
+      oldPrice,
+      imgSrc: coverSrc,
+      link,
+      repoId,
+      slug,
+    });
+  };
 
   return (
-    <a href={link} className={`${styles.card} d-flex flex-column gap-1 shadow`}>
-      <div className={`${styles.imgContainer}`}>
-        <img src={imgSrc} alt={`${name} thumbnail`} />
-      </div>
-      <div className={`${styles.textContainer} d-flex flex-column gap-1`}>
-        <h1>Premium Modules</h1>
-        <h2>
-          <span>{name}</span> <MdArrowOutward />
-        </h2>
-        <p className={styles.para}>{about}</p>
-        <div
-          className={`${styles.priceContainer} d-flex justify-content-start gap-2`}
-        >
-          {oldPrice ? (
-            <p className={`${styles.oldPrice} position-relative`}>
-              {oldPrice}₹<div />
-            </p>
-          ) : (
-            ""
-          )}
-          <p className={styles.price}>{price}₹</p>
+    <article className={styles.card}>
+      <a href={link} className={styles.coverLink}>
+        <div className={styles.cover}>
+          {isBestSeller ? (
+            <span className={styles.badge}>Bestseller</span>
+          ) : null}
+          <img src={coverSrc} alt={`${name} cover`} />
         </div>
-        <div className="d-flex align-items-center gap-2">
-          <div
-            className={`${styles.ratingsContainer} d-flex align-items-center gap-1`}
-          >
-            <p className={`${styles.ratingPara}`}>{rating}</p>
-            <div className={`${styles.ratings} d-flex align-items-center`}>
-              {stars.map((_, index) => (
-                <div key={index}>
-                  {index + 1 <= roundedRating ? <FaStar /> : <FaRegStar />}
-                </div>
-              ))}
+      </a>
+
+      <div className={styles.body}>
+        <div className={styles.info}>
+          <a href={link} className={styles.title}>
+            {name}
+          </a>
+
+          <div className={styles.ratingRow}>
+            <span className={styles.ratingValue}>{Number(rating).toFixed(1)}</span>
+            <div className={styles.stars} aria-label={`${rating} out of 5 stars`}>
+              {renderStars(rating)}
             </div>
+            <a href={link} className={styles.reviews}>
+              ({totalRatings})
+            </a>
           </div>
-          <p className={styles.totalRatingsPara}>{`(${totalRatings})`}</p>
+
+          <div className={styles.priceBlock}>
+            <span className={styles.price}>₹{price}</span>
+            {oldPrice && oldPrice > price ? (
+              <span className={styles.mrp}>₹{oldPrice}</span>
+            ) : null}
+            {discount > 0 ? (
+              <span className={styles.discount}>{discount}% off</span>
+            ) : null}
+          </div>
         </div>
+
+        <button
+          type="button"
+          className={`${styles.cartBtn} ${inCart ? styles.cartBtnAdded : ""}`}
+          onClick={handleCartToggle}
+          aria-pressed={inCart}
+          aria-label={inCart ? `Remove ${name} from cart` : `Add ${name} to cart`}
+        >
+          {inCart ? (
+            <>
+              <FaCheck />
+              <span className={styles.addedLabel}>Added</span>
+              <span className={styles.removeLabel}>Remove</span>
+            </>
+          ) : (
+            "Add to Cart"
+          )}
+        </button>
       </div>
-    </a>
+    </article>
   );
 };
+
+function renderStars(rating) {
+  const stars = [];
+  for (let i = 1; i <= 5; i += 1) {
+    if (rating >= i) {
+      stars.push(<FaStar key={i} />);
+    } else if (rating >= i - 0.5) {
+      stars.push(<FaStarHalfAlt key={i} />);
+    } else {
+      stars.push(<FaRegStar key={i} />);
+    }
+  }
+  return stars;
+}
 
 export default ModuleCard;

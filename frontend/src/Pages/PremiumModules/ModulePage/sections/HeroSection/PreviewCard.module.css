@@ -1,15 +1,18 @@
 .container {
-  width: 80%;
+  width: 100%;
+  max-width: 360px;
   margin: 0 auto;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .container img {
   width: 100%;
   height: auto;
-}
-
-@media screen and (min-width: 500px) {
-  .container {
-    width: 382px;
-  }
+  display: block;
+  object-fit: contain;
+  aspect-ratio: 3 / 4;
+  background: #000;
 }

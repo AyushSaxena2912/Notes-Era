@@ -3,7 +3,12 @@ import { verifyJWT } from "./utils";
 interface OrderTokenType {
   orderId: string;
   type: "soft" | "hard";
-  productId: string;
+  /** Single-module checkout */
+  productId?: string;
+  /** Cart checkout (one or more modules) */
+  productIds?: string[];
+  userId: string;
+  gateway?: "cashfree" | "razorpay";
 }
 
 const verifyOrderToken = (token: string) => {
@@ -11,3 +16,4 @@ const verifyOrderToken = (token: string) => {
 };
 
 export { verifyOrderToken };
+export type { OrderTokenType };

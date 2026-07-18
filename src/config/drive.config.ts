@@ -4,17 +4,30 @@ import { google } from "googleapis";
 
 const scopes = ["https://www.googleapis.com/auth/drive"];
 
-const email = Buffer.from(process.env.DRIVE_EMAIL!, "base64").toString("utf8");
-const key = Buffer.from(process.env.DRIVE_KEY!, "base64")
-  .toString("utf8")
-  .replace(/\\n/g, "\n");
+let client: InstanceType<typeof google.auth.JWT> | null = null;
 
-const client = new google.auth.JWT({
-  email,
-  key,
-  scopes,
-});
+const isDriveConfigured = () =>
+  Boolean(process.env.DRIVE_EMAIL?.trim() && process.env.DRIVE_KEY?.trim());
 
-const getDrive = () => google.drive({ version: "v3", auth: client });
+const getAuthClient = () => {
+  if (client) return client;
+  if (!isDriveConfigured()) {
+    throw new Error("DRIVE_EMAIL / DRIVE_KEY missing in .env");
+  }
+  const email = Buffer.from(process.env.DRIVE_EMAIL!, "base64").toString(
+    "utf8",
+  );
+  const key = Buffer.from(process.env.DRIVE_KEY!, "base64")
+    .toString("utf8")
+    .replace(/\\n/g, "\n");
+  client = new google.auth.JWT({
+    email,
+    key,
+    scopes,
+  });
+  return client;
+};
 
-export { getDrive };
+const getDrive = () => google.drive({ version: "v3", auth: getAuthClient() });
+
+export { getDrive, isDriveConfigured };

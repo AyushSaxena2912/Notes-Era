@@ -7,6 +7,7 @@ import {
 } from "../utils/modules.utils";
 import { getRepoById, getRepos } from "../utils/repos.utils";
 import { bindModulesToRepo, bindModulesToRepos } from "../utils/utils";
+import { stripSensitiveModuleFields } from "../utils/sanitize.utils";
 
 const getAllModules = async (_: Request, res: Response, next: NextFunction) => {
   try {
@@ -16,7 +17,7 @@ const getAllModules = async (_: Request, res: Response, next: NextFunction) => {
     res.json({
       isErr: false,
       status: "success",
-      body: bindedModules,
+      body: stripSensitiveModuleFields(bindedModules),
     });
   } catch (err) {
     console.error(err);
@@ -46,7 +47,7 @@ const getModulesByRepoId = async (
       res.json({
         isErr: false,
         status: "success",
-        body: { data: bindedModules },
+        body: { data: stripSensitiveModuleFields(bindedModules) },
       });
     } else {
       res.json({

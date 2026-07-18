@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { addFileId, createUser, findUser } from "../utils/purchase.utils.js";
 import { getData, getFiles, getSubjects } from "../utils/premiums.utils.js";
 import { addPermission } from "../utils/drive.utils.js";
+import { stripSensitiveModuleFields } from "../utils/sanitize.utils";
 
 const getPremium = async (_: Request, res: Response) => {
   res.status(200).json({
@@ -17,7 +18,7 @@ const handleGetData = async (_: Request, res: Response, next: NextFunction) => {
     res.json({
       isErr: false,
       body: {
-        data: data,
+        data: stripSensitiveModuleFields(data),
       },
       status: "success",
     });
@@ -134,7 +135,7 @@ const handleGetFiles = async (
     res.status(200).json({
       isErr: false,
       body: {
-        files: files,
+        files: stripSensitiveModuleFields(files),
       },
       status: "success",
     });

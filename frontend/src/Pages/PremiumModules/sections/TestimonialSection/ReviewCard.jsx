@@ -1,49 +1,67 @@
-import { FaStar, FaRegStar } from "react-icons/fa";
+import { useState } from "react";
 import styles from "./ReviewCard.module.css";
 
-const ReviewCard = ({
-  imgSrc,
-  imgAlt,
-  rating,
-  shortReview,
-  review,
-  name,
-  about,
-}) => {
-  const roundedRating = Math.round(rating);
-  const stars = Array.from({ length: 5 }, (_, index) => index);
+const PREVIEW_LENGTH = 140;
+
+const getInitials = (name = "") => {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0] || ""}${parts[1][0] || ""}`.toUpperCase();
+};
+
+const ReviewCard = ({ name, role, review, color, avatar }) => {
+  const [expanded, setExpanded] = useState(false);
+  const [imgFailed, setImgFailed] = useState(false);
+  const initials = getInitials(name);
+  const showPhoto = Boolean(avatar) && !imgFailed;
+
+  const needsTruncation = review.length > PREVIEW_LENGTH;
+  const body =
+    !needsTruncation || expanded
+      ? review
+      : `${review.slice(0, PREVIEW_LENGTH).trim()}...`;
 
   return (
-    <div className={`${styles.card} d-flex flex-column gap-4 p-4`}>
-      <div
-        className={`${styles.userContainer} d-flex align-items-center gap-2`}
-      >
-        <div className={`${styles.imgContainer}`}>
-          <img src={imgSrc} alt={imgAlt} />
+    <article className={styles.card}>
+      <header className={styles.header}>
+        <div
+          className={styles.avatar}
+          style={{ background: color || "#8b5cf6" }}
+          aria-hidden
+        >
+          {showPhoto ? (
+            <img
+              className={styles.avatarImg}
+              src={avatar}
+              alt=""
+              onError={() => setImgFailed(true)}
+            />
+          ) : (
+            <span className={styles.initials}>{initials}</span>
+          )}
         </div>
-        <div className="d-flex flex-column gap-1">
+        <div className={styles.meta}>
           <strong>{name}</strong>
-          <p>{about}</p>
-          <div className={`${styles.ratings} d-flex`}>
-            {stars.map((_, index) => (
-              <div key={index}>
-                {index + 1 <= roundedRating ? <FaStar /> : <FaRegStar />}
-              </div>
-            ))}
-          </div>
+          <span>{role}</span>
         </div>
-      </div>
-      <div className={`${styles.reviewContainer} d-flex flex-column gap-3`}>
-        {shortReview ? (
-          <p className={`${styles.shortReview}`}>
-            <strong>{shortReview}</strong>
-          </p>
-        ) : (
-          ""
-        )}
-        <p className={`${styles.review}`}>{review}</p>
-      </div>
-    </div>
+      </header>
+      <p className={styles.review}>
+        {body}
+        {needsTruncation ? (
+          <>
+            {" "}
+            <button
+              type="button"
+              className={styles.readMore}
+              onClick={() => setExpanded((value) => !value)}
+            >
+              {expanded ? "Show less" : "Read more"}
+            </button>
+          </>
+        ) : null}
+      </p>
+    </article>
   );
 };
 

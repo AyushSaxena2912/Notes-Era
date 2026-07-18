@@ -1,60 +1,88 @@
 import { useState, useEffect } from "react";
-import Carousel from "../../../../components/Carousel/Carousel";
 import ModuleCard from "../ModuleCard/ModuleCard";
-// import classes from "./modulesection.module.css";
+import ModulesCarousel from "../ModulesCarousel/ModulesCarousel";
+import { resolveModulePrices } from "../../utils/moduleFilters";
+import styles from "./modulesection.module.css";
+
 const ModuleSection = ({
   name,
   about,
-  modules,
+  college,
+  modules = [],
   isRelatedMods = false,
   slug,
 }) => {
-  const [sectionModules, setSectionModules] = useState(modules);
+  const [sectionModules, setSectionModules] = useState([]);
 
   useEffect(() => {
+    const list = Array.isArray(modules) ? modules : [];
     if (isRelatedMods) {
-      const relatedMods = modules.filter((mod) => mod.slug !== slug);
-      setSectionModules(relatedMods);
+      setSectionModules(list.filter((mod) => mod.slug !== slug));
+    } else {
+      setSectionModules(list);
     }
   }, [modules, isRelatedMods, slug]);
 
-  return sectionModules.length ? (
-    <div className={``}>
-      <header className={` d-flex flex-column gap-1 mb-4`}>
-        <h1>Premium Modules</h1>
-        <h2>{`Explore ${name} Modules Repository`}</h2>
-        <p>{about}</p>
-      </header>
-      <Carousel
-        className="px-2 mb-5"
-        loop
-        slidesPerView={1}
-        autoplay={{ delay: 5000 }}
-        pagination={{ clickable: true }}
-        centeredSlides={true}
-        breakpoints={{
-          989: { slidesPerView: 2, centeredSlides: false },
-          1200: { slidesPerView: 3, centeredSlides: false },
-        }}
-        keyboard={{ enabled: true, onlyInViewport: true }}
-      >
-        {sectionModules.map((module, index) => (
-          <ModuleCard
-            key={index}
-            imgSrc={module.thumbnailSrc}
-            link={`/premium-modules/${module.repoId}/${module.slug}`}
-            name={module.name}
-            about={module.about}
-            oldPrice={49}
-            price={module.softCopyPrice}
-            rating={module.rating}
-            totalRatings={module.totalRatings}
-          />
-        ))}
-      </Carousel>
+  if (!sectionModules.length) return null;
+
+  // Related modules should always use the carousel (most repos have ≤4 units,
+  // so a "> 4" threshold never fired after filtering out the current module).
+  const useCarousel = isRelatedMods || sectionModules.length > 4;
+
+  const header = (
+    <div className={styles.headerText}>
+      <h2>{name}</h2>
+      <p>
+        {isRelatedMods
+          ? "Unit-wise notes, important topics & PYQs"
+          : about
+            ? about
+                .replace(
+                  /\s*[-–—]?\s*Available in Hard Copy and Soft Copy Formats\.?/gi,
+                  "",
+                )
+                .replace(/Soft Copy/gi, "")
+                .replace(/\s{2,}/g, " ")
+                .trim()
+            : null}
+      </p>
     </div>
-  ) : (
-    ""
+  );
+
+  const cards = sectionModules.map((module, index) => {
+    const { price, oldPrice } = resolveModulePrices(module);
+    return (
+      <ModuleCard
+        key={module.slug || index}
+        imgSrc="/Assets2/Premium-Modules/module-cover.png"
+        link={`/premium-modules/${module.repoId}/${module.slug}`}
+        name={module.name}
+        about={module.about}
+        college={module.college || college}
+        isBestSeller={index === 0}
+        oldPrice={oldPrice}
+        price={price}
+        rating={module.rating || 4.5}
+        totalRatings={module.totalRatings || 100}
+        repoId={module.repoId}
+        slug={module.slug}
+      />
+    );
+  });
+
+  if (useCarousel) {
+    return (
+      <div className={styles.section}>
+        <ModulesCarousel header={header}>{cards}</ModulesCarousel>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.section}>
+      <header className={styles.header}>{header}</header>
+      <div className={styles.grid}>{cards}</div>
+    </div>
   );
 };
 
