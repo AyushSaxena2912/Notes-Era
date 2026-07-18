@@ -8,7 +8,11 @@ import { getPaymentGateway } from "../config/payment.config";
 import { getAmount, getFileId } from "../utils/modules.utils";
 import { addPermission } from "../utils/drive.utils";
 import { generateHMAC, generateJWT } from "../utils/utils";
-import { addModulePurchase } from "../utils/modulePurchase.utils";
+import {
+  addModulePurchase,
+  getLatestPurchaseForUserProduct,
+  isPurchaseActive,
+} from "../utils/modulePurchase.utils";
 import { verifyOrderToken, OrderTokenType } from "../utils/payment.utils";
 import { getCouponDiscount } from "../utils/coupons.utils";
 import {
@@ -18,6 +22,20 @@ import {
 } from "../validation/auth.validation";
 
 const PLATFORM_FEE_RUPEES = 2;
+
+const getAlreadyOwnedProductIds = async (
+  userId: string,
+  productIds: string[],
+) => {
+  const owned: string[] = [];
+  for (const productId of productIds) {
+    const purchase = await getLatestPurchaseForUserProduct(userId, productId);
+    if (purchase && isPurchaseActive(purchase)) {
+      owned.push(productId);
+    }
+  }
+  return owned;
+};
 
 const normalizePhone = (value?: string) => {
   const digits = String(value || "").replace(/\D/g, "");
@@ -140,6 +158,19 @@ const createNewOrder = async (
     }
 
     const { productId, type } = parsed.data;
+
+    const alreadyOwned = await getAlreadyOwnedProductIds(req.user.id, [
+      productId,
+    ]);
+    if (alreadyOwned.length) {
+      return res.status(409).json({
+        isErr: true,
+        status: "error",
+        message: "You already own this module.",
+        ownedProductIds: alreadyOwned,
+      });
+    }
+
     const { softCopyPrice, hardCopyPrice } = await getAmount(productId);
     const amountRupees = type === "soft" ? softCopyPrice : hardCopyPrice;
 
@@ -199,6 +230,23 @@ const createCartOrder = async (
     }
 
     const productIds = [...new Set(parsed.data.productIds)];
+
+    const alreadyOwned = await getAlreadyOwnedProductIds(
+      req.user.id,
+      productIds,
+    );
+    if (alreadyOwned.length) {
+      return res.status(409).json({
+        isErr: true,
+        status: "error",
+        message:
+          alreadyOwned.length === 1
+            ? "You already own this module. Remove it from your cart to continue."
+            : "Some modules in your cart are already purchased. Remove them to continue.",
+        ownedProductIds: alreadyOwned,
+      });
+    }
+
     let subtotal = 0;
 
     for (const productId of productIds) {
@@ -284,6 +332,28 @@ const fulfillPurchase = async ({
   }
 
   for (const productId of productIds) {
+    const existing = await getLatestPurchaseForUserProduct(
+      req.user!.id,
+      productId,
+    );
+    if (existing && isPurchaseActive(existing)) {
+      // Already owned (e.g. race / double verify) — still ensure Drive share.
+      if (decodedToken.type === "soft") {
+        const fileId = await getFileId(productId);
+        if (fileId) {
+          try {
+            await addPermission(buyerEmail, fileId);
+          } catch (err) {
+            console.warn(
+              `Drive share failed for owned ${productId} (${fileId}).`,
+              err,
+            );
+          }
+        }
+      }
+      continue;
+    }
+
     if (decodedToken.type === "soft") {
       const fileId = await getFileId(productId);
       if (fileId) {

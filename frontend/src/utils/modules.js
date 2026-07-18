@@ -131,6 +131,22 @@ const fetchModuleAccess = async (slug) => {
   return { ok: response.ok, data };
 };
 
+const fetchMyModules = async () => {
+  try {
+    if (!getAccessToken()) {
+      return { isErr: true, message: "Authentication required.", status: 401 };
+    }
+    const { response, data } = await authFetch("/access/modules");
+    if (!response.ok) {
+      return { isErr: true, ...data, status: response.status };
+    }
+    return data;
+  } catch (err) {
+    console.error(`Error fetching purchases: ${err}.`);
+    return { isErr: true };
+  }
+};
+
 export {
   backendUrl,
   wakeBackend,
@@ -140,4 +156,5 @@ export {
   createCartOrder,
   verifyPayment,
   fetchModuleAccess,
+  fetchMyModules,
 };

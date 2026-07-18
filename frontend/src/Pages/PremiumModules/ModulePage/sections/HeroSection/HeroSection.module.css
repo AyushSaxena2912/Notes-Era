@@ -219,6 +219,28 @@
   background: #6F48E8;
 }
 
+.buyBtn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.ownedBtn {
+  background: rgba(141, 108, 252, 0.2);
+  color: #ddd6fe;
+}
+
+.ownedBtn:hover {
+  background: rgba(141, 108, 252, 0.32);
+  color: #fff;
+}
+
+.ownedNote {
+  margin: 0;
+  color: #c4b5fd;
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .sectionBlock {
   display: flex;
   flex-direction: column;

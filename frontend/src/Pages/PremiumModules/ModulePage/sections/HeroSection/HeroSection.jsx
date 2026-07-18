@@ -8,6 +8,12 @@ import {
   fetchModuleAccess,
 } from "../../../../../utils/modules";
 import {
+  fetchOwnedModuleSlugs,
+  isModuleOwned,
+  markModulesOwned,
+  subscribeOwnedModules,
+} from "../../../../../utils/ownedModules";
+import {
   getStudentUser,
   isStudentLoggedIn,
 } from "../../../../../utils/studentAuth";
@@ -51,6 +57,8 @@ const HeroSection = ({ module, className, college }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [driveUrl, setDriveUrl] = useState("");
   const [paymentError, setPaymentError] = useState("");
+  const [owned, setOwned] = useState(() => isModuleOwned(module?.slug));
+  const [openingOwned, setOpeningOwned] = useState(false);
 
   const { price, oldPrice } = resolveModulePrices(module);
   const rating = Number(module.rating) || 4.5;
@@ -80,18 +88,52 @@ const HeroSection = ({ module, className, college }) => {
     loadRazorPay();
   }, []);
 
+  useEffect(() => {
+    if (!module?.slug) return undefined;
+    if (!isStudentLoggedIn()) {
+      setOwned(false);
+      return undefined;
+    }
+    setOwned(isModuleOwned(module.slug));
+    fetchOwnedModuleSlugs().then((slugs) =>
+      setOwned(slugs.has(module.slug)),
+    );
+    return subscribeOwnedModules((slugs) =>
+      setOwned(slugs.has(module.slug)),
+    );
+  }, [module?.slug]);
+
   const copyText = useCallback((text) => {
     navigator.clipboard.writeText(text);
   }, []);
 
   const handlePaymentSuccess = useCallback(async () => {
     setIsPaymentProcessing(false);
+    markModulesOwned([module.slug]);
+    setOwned(true);
     const { ok, data } = await fetchModuleAccess(module.slug);
     if (ok && data?.body?.driveUrl) {
       setDriveUrl(data.body.driveUrl);
     }
     setIsSuccessModalOpen(true);
   }, [module.slug]);
+
+  const handleOpenOwned = useCallback(async () => {
+    if (!isStudentLoggedIn()) {
+      const next = `${location.pathname}${location.search}`;
+      navigate(`/login?next=${encodeURIComponent(next)}`);
+      return;
+    }
+    setPaymentError("");
+    setOpeningOwned(true);
+    const { ok, data } = await fetchModuleAccess(module.slug);
+    setOpeningOwned(false);
+    if (ok && data?.body?.driveUrl) {
+      window.open(data.body.driveUrl, "_blank", "noopener,noreferrer");
+      return;
+    }
+    navigate("/orders");
+  }, [module.slug, navigate, location.pathname, location.search]);
 
   const closeLoadingModal = useCallback(() => {
     setIsPaymentProcessing(false);
@@ -102,6 +144,11 @@ const HeroSection = ({ module, className, college }) => {
   }, []);
 
   const handlePurchase = useCallback(async () => {
+    if (owned) {
+      handleOpenOwned();
+      return;
+    }
+
     if (!isStudentLoggedIn()) {
       const next = `${location.pathname}${location.search}`;
       navigate(`/login?next=${encodeURIComponent(next)}`);
@@ -129,6 +176,12 @@ const HeroSection = ({ module, className, college }) => {
       if (order?.status === 401) {
         const next = `${location.pathname}${location.search}`;
         navigate(`/login?next=${encodeURIComponent(next)}`);
+        return;
+      }
+      if (order?.status === 409) {
+        markModulesOwned([module.slug]);
+        setOwned(true);
+        setPaymentError("You already own this module.");
         return;
       }
       setPaymentError(order?.message || "Could not create payment order.");
@@ -224,11 +277,13 @@ const HeroSection = ({ module, className, college }) => {
       setPaymentError(err?.message || "Could not open payment checkout.");
     }
   }, [
+    owned,
     module.slug,
     navigate,
     location.pathname,
     location.search,
     handlePaymentSuccess,
+    handleOpenOwned,
   ]);
 
   return (
@@ -298,21 +353,34 @@ const HeroSection = ({ module, className, college }) => {
                 </header>
 
                 <div className={styles.purchaseBar}>
-                  <div className={styles.priceRow}>
-                    <span className={styles.price}>₹{price}</span>
-                    {oldPrice > price ? (
-                      <span className={styles.mrp}>₹{oldPrice}</span>
-                    ) : null}
-                    {discount > 0 ? (
-                      <span className={styles.discount}>{discount}% off</span>
-                    ) : null}
-                  </div>
+                  {owned ? (
+                    <p className={styles.ownedNote}>
+                      You already purchased this module.
+                    </p>
+                  ) : (
+                    <div className={styles.priceRow}>
+                      <span className={styles.price}>₹{price}</span>
+                      {oldPrice > price ? (
+                        <span className={styles.mrp}>₹{oldPrice}</span>
+                      ) : null}
+                      {discount > 0 ? (
+                        <span className={styles.discount}>{discount}% off</span>
+                      ) : null}
+                    </div>
+                  )}
                   <button
                     type="button"
-                    className={styles.buyBtn}
-                    onClick={handlePurchase}
+                    className={`${styles.buyBtn} ${
+                      owned ? styles.ownedBtn : ""
+                    }`}
+                    onClick={owned ? handleOpenOwned : handlePurchase}
+                    disabled={openingOwned}
                   >
-                    Buy e-Module
+                    {owned
+                      ? openingOwned
+                        ? "Opening..."
+                        : "Open module"
+                      : "Buy e-Module"}
                   </button>
                 </div>
 

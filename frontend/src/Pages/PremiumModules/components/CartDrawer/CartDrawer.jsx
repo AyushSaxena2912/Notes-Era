@@ -12,6 +12,12 @@ import { openCashfreeCheckout } from "../../../../utils/cashfree";
 import { getRazorPay } from "../../../../utils/razorpay";
 import { createCartOrder, verifyPayment } from "../../../../utils/modules";
 import {
+  fetchOwnedModuleSlugs,
+  getOwnedModuleSlugsSync,
+  markModulesOwned,
+  subscribeOwnedModules,
+} from "../../../../utils/ownedModules";
+import {
   getStudentUser,
   isStudentLoggedIn,
 } from "../../../../utils/studentAuth";
@@ -24,6 +30,7 @@ const CartDrawer = ({ open, onClose }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [items, setItems] = useState(() => getCart());
+  const [ownedSlugs, setOwnedSlugs] = useState(() => getOwnedModuleSlugsSync());
   const [couponInput, setCouponInput] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponError, setCouponError] = useState("");
@@ -34,6 +41,15 @@ const CartDrawer = ({ open, onClose }) => {
     setItems(getCart());
     return subscribeCartItems(setItems);
   }, []);
+
+  useEffect(() => {
+    if (!isStudentLoggedIn()) {
+      setOwnedSlugs(new Set());
+      return undefined;
+    }
+    fetchOwnedModuleSlugs().then(setOwnedSlugs);
+    return subscribeOwnedModules(setOwnedSlugs);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -48,9 +64,20 @@ const CartDrawer = ({ open, onClose }) => {
     };
   }, [open, onClose]);
 
+  const purchasableItems = useMemo(
+    () => items.filter((item) => item.slug && !ownedSlugs.has(item.slug)),
+    [items, ownedSlugs],
+  );
+
+  const ownedItems = useMemo(
+    () => items.filter((item) => item.slug && ownedSlugs.has(item.slug)),
+    [items, ownedSlugs],
+  );
+
   const subtotal = useMemo(
-    () => items.reduce((sum, item) => sum + Number(item.price || 0), 0),
-    [items],
+    () =>
+      purchasableItems.reduce((sum, item) => sum + Number(item.price || 0), 0),
+    [purchasableItems],
   );
 
   const discount = useMemo(
@@ -58,7 +85,7 @@ const CartDrawer = ({ open, onClose }) => {
     [appliedCoupon, subtotal],
   );
 
-  const platformFee = items.length > 0 ? PLATFORM_FEE : 0;
+  const platformFee = purchasableItems.length > 0 ? PLATFORM_FEE : 0;
   const total = Math.max(0, subtotal - discount + platformFee);
 
   const handleApplyCoupon = (event) => {
@@ -81,7 +108,7 @@ const CartDrawer = ({ open, onClose }) => {
   };
 
   const handleCheckout = async () => {
-    if (!items.length || isCheckingOut) return;
+    if (!purchasableItems.length || isCheckingOut) return;
 
     if (!isStudentLoggedIn()) {
       onClose();
@@ -96,9 +123,13 @@ const CartDrawer = ({ open, onClose }) => {
       return;
     }
 
-    const productIds = items.map((item) => item.slug).filter(Boolean);
+    const productIds = purchasableItems.map((item) => item.slug).filter(Boolean);
     if (!productIds.length) {
-      setCheckoutError("Cart items are missing module ids. Re-add them.");
+      setCheckoutError(
+        ownedItems.length
+          ? "All items in your cart are already purchased."
+          : "Cart items are missing module ids. Re-add them.",
+      );
       return;
     }
 
@@ -123,6 +154,14 @@ const CartDrawer = ({ open, onClose }) => {
         const next = `${location.pathname}${location.search}`;
         navigate(`/login?next=${encodeURIComponent(next || "/")}`);
         return;
+      }
+      if (order?.status === 409 && Array.isArray(order?.ownedProductIds)) {
+        markModulesOwned(order.ownedProductIds);
+        setOwnedSlugs((prev) => {
+          const next = new Set(prev);
+          order.ownedProductIds.forEach((slug) => next.add(slug));
+          return next;
+        });
       }
       setCheckoutError(order?.message || "Could not create payment order.");
       return;
@@ -162,6 +201,7 @@ const CartDrawer = ({ open, onClose }) => {
           return;
         }
 
+        markModulesOwned(productIds);
         clearCart();
         onClose();
         navigate("/orders");
@@ -206,6 +246,7 @@ const CartDrawer = ({ open, onClose }) => {
             );
             return;
           }
+          markModulesOwned(productIds);
           clearCart();
           onClose();
           navigate("/orders");
@@ -273,8 +314,14 @@ const CartDrawer = ({ open, onClose }) => {
               {items.map((item) => {
                 const college =
                   item.college || extractCollege(item.about || "");
+                const alreadyOwned = item.slug && ownedSlugs.has(item.slug);
                 return (
-                  <li key={item.id} className={styles.item}>
+                  <li
+                    key={item.id}
+                    className={`${styles.item} ${
+                      alreadyOwned ? styles.itemOwned : ""
+                    }`}
+                  >
                     <a href={item.link || "#modules"} className={styles.thumb}>
                       <img
                         src={
@@ -291,8 +338,13 @@ const CartDrawer = ({ open, onClose }) => {
                       {college ? (
                         <p className={styles.college}>{college}</p>
                       ) : null}
+                      {alreadyOwned ? (
+                        <p className={styles.ownedTag}>Already purchased</p>
+                      ) : null}
                       <div className={styles.row}>
-                        <span className={styles.price}>₹{item.price}</span>
+                        <span className={styles.price}>
+                          {alreadyOwned ? "Owned" : `₹${item.price}`}
+                        </span>
                         <button
                           type="button"
                           className={styles.remove}
@@ -385,9 +437,13 @@ const CartDrawer = ({ open, onClose }) => {
               type="button"
               className={styles.checkout}
               onClick={handleCheckout}
-              disabled={isCheckingOut}
+              disabled={isCheckingOut || purchasableItems.length === 0}
             >
-              {isCheckingOut ? "Opening checkout…" : "Proceed to checkout"}
+              {isCheckingOut
+                ? "Opening checkout…"
+                : purchasableItems.length === 0
+                  ? "Already purchased"
+                  : "Proceed to checkout"}
             </button>
           </footer>
         ) : null}

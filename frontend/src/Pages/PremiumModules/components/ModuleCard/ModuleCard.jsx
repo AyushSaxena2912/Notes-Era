@@ -6,6 +6,12 @@ import {
   removeFromCart,
   subscribeCartItems,
 } from "../../../../utils/cart";
+import {
+  fetchOwnedModuleSlugs,
+  isModuleOwned,
+  subscribeOwnedModules,
+} from "../../../../utils/ownedModules";
+import { isStudentLoggedIn } from "../../../../utils/studentAuth";
 import styles from "./ModuleCard.module.css";
 
 const DEFAULT_COVER = "/Assets2/Premium-Modules/module-cover.png";
@@ -28,6 +34,7 @@ const ModuleCard = ({
   const [inCart, setInCart] = useState(() =>
     getCart().some((item) => item.id === itemId),
   );
+  const [owned, setOwned] = useState(() => isModuleOwned(slug));
   const coverSrc = imgSrc || DEFAULT_COVER;
   const discount =
     oldPrice && price && oldPrice > price
@@ -41,9 +48,20 @@ const ModuleCard = ({
     return subscribeCartItems(sync);
   }, [itemId]);
 
+  useEffect(() => {
+    if (!isStudentLoggedIn()) {
+      setOwned(false);
+      return undefined;
+    }
+    setOwned(isModuleOwned(slug));
+    fetchOwnedModuleSlugs().then((slugs) => setOwned(slugs.has(slug)));
+    return subscribeOwnedModules((slugs) => setOwned(slugs.has(slug)));
+  }, [slug]);
+
   const handleCartToggle = (event) => {
     event.preventDefault();
     event.stopPropagation();
+    if (owned) return;
     if (inCart) {
       removeFromCart(itemId);
       return;
@@ -100,23 +118,36 @@ const ModuleCard = ({
           </div>
         </div>
 
-        <button
-          type="button"
-          className={`${styles.cartBtn} ${inCart ? styles.cartBtnAdded : ""}`}
-          onClick={handleCartToggle}
-          aria-pressed={inCart}
-          aria-label={inCart ? `Remove ${name} from cart` : `Add ${name} to cart`}
-        >
-          {inCart ? (
-            <>
-              <FaCheck />
-              <span className={styles.addedLabel}>Added</span>
-              <span className={styles.removeLabel}>Remove</span>
-            </>
-          ) : (
-            "Add to Cart"
-          )}
-        </button>
+        {owned ? (
+          <a
+            href="/orders"
+            className={`${styles.cartBtn} ${styles.ownedBtn}`}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <FaCheck />
+            Already purchased
+          </a>
+        ) : (
+          <button
+            type="button"
+            className={`${styles.cartBtn} ${inCart ? styles.cartBtnAdded : ""}`}
+            onClick={handleCartToggle}
+            aria-pressed={inCart}
+            aria-label={
+              inCart ? `Remove ${name} from cart` : `Add ${name} to cart`
+            }
+          >
+            {inCart ? (
+              <>
+                <FaCheck />
+                <span className={styles.addedLabel}>Added</span>
+                <span className={styles.removeLabel}>Remove</span>
+              </>
+            ) : (
+              "Add to Cart"
+            )}
+          </button>
+        )}
       </div>
     </article>
   );

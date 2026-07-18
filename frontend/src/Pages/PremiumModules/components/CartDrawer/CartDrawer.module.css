@@ -156,6 +156,19 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.itemOwned {
+  opacity: 0.85;
+  border-color: rgba(141, 108, 252, 0.28);
+}
+
+.ownedTag {
+  margin: 0 !important;
+  width: auto !important;
+  color: #c4b5fd !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
 .thumb {
   display: block;
   width: 72px;

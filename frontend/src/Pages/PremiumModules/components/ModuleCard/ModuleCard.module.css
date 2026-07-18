@@ -193,3 +193,15 @@
 .cartBtnAdded:hover .removeLabel {
   display: inline;
 }
+
+.ownedBtn {
+  background: rgba(141, 108, 252, 0.16);
+  color: #c4b5fd;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ownedBtn:hover {
+  background: rgba(141, 108, 252, 0.24);
+  color: #ddd6fe;
+}
