@@ -63,23 +63,15 @@ const ProfilePage = () => {
   const isOtherCollege = form.college === OTHER_COLLEGE;
 
   useEffect(() => {
-    fetchStudentMe().then((user) => {
-      if (!user) return;
-      setForm((prev) => {
-        const known = collegeInList(user.college, colleges);
-        return {
-          ...prev,
-          name: user.name || "",
-          email: user.email || "",
-          college: known ? user.college : OTHER_COLLEGE,
-          customCollege: known ? "" : user.college || "",
-          year: user.year || prev.year,
-          mobileNumber: user.mobileNumber || "",
-        };
-      });
-    });
+    let cancelled = false;
 
-    fetchAuthMeta().then((meta) => {
+    const load = async () => {
+      const [user, meta] = await Promise.all([
+        fetchStudentMe(),
+        fetchAuthMeta(),
+      ]);
+      if (cancelled) return;
+
       const nextColleges = withOtherOption(
         Array.isArray(meta?.colleges) && meta.colleges.length
           ? meta.colleges
@@ -91,7 +83,24 @@ const ProfilePage = () => {
           : DEFAULT_YEARS;
       setColleges(nextColleges);
       setYears(nextYears);
-    });
+
+      if (!user) return;
+      const known = collegeInList(user.college, nextColleges);
+      setForm((prev) => ({
+        ...prev,
+        name: user.name || "",
+        email: user.email || "",
+        college: known ? user.college : OTHER_COLLEGE,
+        customCollege: known ? "" : user.college || "",
+        year: user.year || prev.year,
+        mobileNumber: user.mobileNumber || "",
+      }));
+    };
+
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const onForm = (key) => (event) => {
