@@ -48,19 +48,20 @@ export function subscribeStudentAuth(callback) {
 
 export async function authFetch(path, options = {}) {
   const token = getAccessToken();
+  const { timeoutMs = 90000, headers: optionHeaders, ...fetchOptions } =
+    options;
   const headers = {
     "Content-Type": "application/json",
-    ...(options.headers || {}),
+    ...(optionHeaders || {}),
   };
   if (token) headers.Authorization = `Bearer ${token}`;
 
   const controller = new AbortController();
-  const timeoutMs = options.timeoutMs ?? 45000;
   const timer = window.setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const response = await fetch(`${backendUrl}${path}`, {
-      ...options,
+      ...fetchOptions,
       headers,
       credentials: "include",
       signal: controller.signal,
@@ -86,7 +87,7 @@ export async function authFetch(path, options = {}) {
       data: {
         isErr: true,
         message: aborted
-          ? "Server is taking too long (it may be waking up). Please try again."
+          ? "Server is waking up on free hosting — wait a few seconds and try again."
           : "Could not reach the server. Check your connection and try again.",
       },
     };

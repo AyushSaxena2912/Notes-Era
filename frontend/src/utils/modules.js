@@ -10,18 +10,23 @@ let reposCache = null;
 let reposPromise = null;
 let wakePromise = null;
 
-/** Hit backend early so cold starts finish before modules need data. */
+/** Hit backend early so cold starts finish before modules/auth need data. */
 const wakeBackend = () => {
   if (wakePromise) return wakePromise;
+  // Render free tier can take 60–90s on first wake
   wakePromise = axios
-    .get(`${backendUrl}/modules`, { timeout: 45000 })
+    .get(`${backendUrl}/modules`, { timeout: 90000 })
     .then(({ data }) => {
       if (!data?.isErr && Array.isArray(data?.body) && data.body.length) {
         reposCache = data;
       }
       return data;
     })
-    .catch(() => null);
+    .catch(() => {
+      // Allow retry on next login/page visit if cold start failed
+      wakePromise = null;
+      return null;
+    });
   return wakePromise;
 };
 

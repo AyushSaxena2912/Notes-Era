@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import {
@@ -6,6 +6,7 @@ import {
   loginStudent,
   resendVerificationEmail,
 } from "../../../utils/studentAuth";
+import { wakeBackend } from "../../../utils/modules";
 import AuthLayout from "./AuthLayout";
 import styles from "./StudentAuth.module.css";
 
@@ -15,6 +16,7 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
   const [loading, setLoading] = useState(false);
+  const [waking, setWaking] = useState(true);
   const [resending, setResending] = useState(false);
   const [unverifiedEmail, setUnverifiedEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -23,6 +25,20 @@ const LoginPage = () => {
   const nextQuery = params.get("next")
     ? `?next=${encodeURIComponent(params.get("next"))}`
     : "";
+
+  useEffect(() => {
+    let cancelled = false;
+    setWaking(true);
+    setInfo("Connecting to server…");
+    wakeBackend().finally(() => {
+      if (cancelled) return;
+      setWaking(false);
+      setInfo("");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const onChange = (key) => (event) => {
     setForm((prev) => ({ ...prev, [key]: event.target.value }));
@@ -35,6 +51,10 @@ const LoginPage = () => {
     setUnverifiedEmail("");
     setLoading(true);
     try {
+      // Ensure Render free tier is awake before auth
+      setInfo("Waking server…");
+      await wakeBackend();
+      setInfo("");
       const { ok, data } = await loginStudent(form);
       if (!ok) {
         if (data?.code === "EMAIL_NOT_VERIFIED") {
@@ -51,6 +71,7 @@ const LoginPage = () => {
       setError(err?.message || "Could not log in. Please try again.");
     } finally {
       setLoading(false);
+      setInfo("");
     }
   };
 
@@ -138,8 +159,16 @@ const LoginPage = () => {
           </button>
         ) : null}
 
-        <button className={styles.submit} type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
+        <button
+          className={styles.submit}
+          type="submit"
+          disabled={loading || waking}
+        >
+          {loading
+            ? "Logging in..."
+            : waking
+              ? "Connecting..."
+              : "Login"}
         </button>
       </form>
     </AuthLayout>
