@@ -34,19 +34,24 @@ const LoginPage = () => {
     setInfo("");
     setUnverifiedEmail("");
     setLoading(true);
-    const { ok, data } = await loginStudent(form);
-    setLoading(false);
-    if (!ok) {
-      if (data?.code === "EMAIL_NOT_VERIFIED") {
-        const email = data?.body?.email || form.email;
-        setUnverifiedEmail(email);
-        setError(data?.message || "Please verify your email first.");
+    try {
+      const { ok, data } = await loginStudent(form);
+      if (!ok) {
+        if (data?.code === "EMAIL_NOT_VERIFIED") {
+          const email = data?.body?.email || form.email;
+          setUnverifiedEmail(email);
+          setError(data?.message || "Please verify your email first.");
+          return;
+        }
+        setError(data?.message || "Could not log in.");
         return;
       }
-      setError(data?.message || "Could not log in.");
-      return;
+      navigate(loginRedirectPath(params.get("next")), { replace: true });
+    } catch (err) {
+      setError(err?.message || "Could not log in. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    navigate(loginRedirectPath(params.get("next")), { replace: true });
   };
 
   const handleResend = async () => {

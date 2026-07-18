@@ -67,10 +67,12 @@ export const issueAuthTokens = (user: UserDocument, res?: Response) => {
   );
 
   if (res) {
+    const crossSite = Boolean(process.env.FRONTEND_URL?.includes("http"));
     res.cookie(REFRESH_COOKIE_NAME, refreshToken, {
       httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      // Vercel frontend + Render API are different sites — need None+Secure
+      sameSite: crossSite ? "none" : "lax",
+      secure: crossSite || process.env.NODE_ENV === "production",
       maxAge: 30 * 24 * 60 * 60 * 1000,
       path: "/",
     });
@@ -90,10 +92,11 @@ export const verifyAccessToken = (token: string): AccessPayload | null => {
 };
 
 export const clearRefreshCookie = (res: Response) => {
+  const crossSite = Boolean(process.env.FRONTEND_URL?.includes("http"));
   res.clearCookie(REFRESH_COOKIE_NAME, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    sameSite: crossSite ? "none" : "lax",
+    secure: crossSite || process.env.NODE_ENV === "production",
     path: "/",
   });
 };

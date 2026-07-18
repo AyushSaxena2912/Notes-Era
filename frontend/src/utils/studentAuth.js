@@ -54,25 +54,45 @@ export async function authFetch(path, options = {}) {
   };
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const response = await fetch(`${backendUrl}${path}`, {
-    ...options,
-    headers,
-    credentials: "include",
-  });
+  const controller = new AbortController();
+  const timeoutMs = options.timeoutMs ?? 45000;
+  const timer = window.setTimeout(() => controller.abort(), timeoutMs);
 
-  if (response.status === 401) {
-    clearStudentSession();
-  }
-
-  let data = null;
-  const text = await response.text();
   try {
-    data = text ? JSON.parse(text) : null;
-  } catch {
-    data = { message: text };
-  }
+    const response = await fetch(`${backendUrl}${path}`, {
+      ...options,
+      headers,
+      credentials: "include",
+      signal: controller.signal,
+    });
 
-  return { response, data };
+    if (response.status === 401) {
+      clearStudentSession();
+    }
+
+    let data = null;
+    const text = await response.text();
+    try {
+      data = text ? JSON.parse(text) : null;
+    } catch {
+      data = { message: text || "Unexpected server response." };
+    }
+
+    return { response, data };
+  } catch (err) {
+    const aborted = err?.name === "AbortError";
+    return {
+      response: { ok: false, status: 0 },
+      data: {
+        isErr: true,
+        message: aborted
+          ? "Server is taking too long (it may be waking up). Please try again."
+          : "Could not reach the server. Check your connection and try again.",
+      },
+    };
+  } finally {
+    window.clearTimeout(timer);
+  }
 }
 
 export async function fetchAuthMeta() {
