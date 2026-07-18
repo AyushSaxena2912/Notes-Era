@@ -1,5 +1,15 @@
 import { FiSearch, FiX } from "react-icons/fi";
+import FilterSelect from "./FilterSelect";
 import styles from "./ModulesToolbar.module.css";
+
+const SORT_OPTIONS = [
+  { value: "relevance", label: "Relevance" },
+  { value: "name-asc", label: "Name (A-Z)" },
+  { value: "name-desc", label: "Name (Z-A)" },
+  { value: "price-asc", label: "Price: Low to High" },
+  { value: "price-desc", label: "Price: High to Low" },
+  { value: "rating-desc", label: "Top Rated" },
+];
 
 const ModulesToolbar = ({
   query,
@@ -26,6 +36,16 @@ const ModulesToolbar = ({
     onSortChange("relevance");
   };
 
+  const collegeOptions = (colleges || []).map((item) => ({
+    value: item,
+    label: item,
+  }));
+
+  const yearOptions = [
+    { value: "all", label: "All years" },
+    ...(years || []).map((item) => ({ value: item, label: item })),
+  ];
+
   return (
     <aside className={styles.toolbar}>
       <div className={styles.searchWrap}>
@@ -50,52 +70,29 @@ const ModulesToolbar = ({
         ) : null}
       </div>
 
-      <label className={styles.field}>
-        <span>Sort</span>
-        <select
-          value={sort}
-          onChange={(event) => onSortChange(event.target.value)}
-          aria-label="Sort"
-        >
-          <option value="relevance">Relevance</option>
-          <option value="name-asc">Name (A-Z)</option>
-          <option value="name-desc">Name (Z-A)</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="rating-desc">Top Rated</option>
-        </select>
-      </label>
+      <FilterSelect
+        label="Sort"
+        value={sort}
+        options={SORT_OPTIONS}
+        onChange={onSortChange}
+        ariaLabel="Sort"
+      />
 
-      <label className={styles.field}>
-        <span>College</span>
-        <select
-          value={college}
-          onChange={(event) => onCollegeChange(event.target.value)}
-          aria-label="College"
-        >
-          {colleges.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-      </label>
+      <FilterSelect
+        label="College"
+        value={college}
+        options={collegeOptions}
+        onChange={onCollegeChange}
+        ariaLabel="College"
+      />
 
-      <label className={styles.field}>
-        <span>Year</span>
-        <select
-          value={year}
-          onChange={(event) => onYearChange(event.target.value)}
-          aria-label="Year"
-        >
-          <option value="all">All years</option>
-          {years.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-      </label>
+      <FilterSelect
+        label="Year"
+        value={year}
+        options={yearOptions}
+        onChange={onYearChange}
+        ariaLabel="Year"
+      />
 
       {hasFilters ? (
         <button type="button" className={styles.reset} onClick={clearAll}>

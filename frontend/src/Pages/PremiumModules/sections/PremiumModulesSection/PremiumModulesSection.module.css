@@ -1,10 +1,21 @@
 .container {
   --heading-1-color: #8D6CFC;
-  margin-bottom: 100px;
+  /* Match header pill width */
+  width: min(1100px, calc(100% - 32px));
+  max-width: min(1100px, calc(100% - 32px));
+  margin: 0 auto 100px;
+  box-sizing: border-box;
   padding-top: 24px;
   scroll-margin-top: 100px;
   background-color: transparent;
   overflow: visible;
+}
+
+@media screen and (min-width: 990px) {
+  .container {
+    width: min(1100px, calc(100% - 48px));
+    max-width: min(1100px, calc(100% - 48px));
+  }
 }
 
 .sectionHeader {

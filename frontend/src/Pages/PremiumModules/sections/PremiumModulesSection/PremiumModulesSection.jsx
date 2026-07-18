@@ -123,7 +123,7 @@ const PremiumModulesSection = () => {
   }, [year, filteredModules]);
 
   return (
-    <section className={`${styles.container} container`} id="modules">
+    <section className={styles.container} id="modules">
       <header className={styles.sectionHeader}>
         <h2>All e-Modules</h2>
         <p>

@@ -1,0 +1,127 @@
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #a1a1aa;
+}
+
+.trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: #121214;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #e4e4e7;
+  cursor: pointer;
+  text-align: left;
+}
+
+.triggerOpen,
+.trigger:focus-visible {
+  border-color: #8d6cfc;
+  box-shadow: 0 0 0 2px rgba(141, 108, 252, 0.2);
+  outline: none;
+}
+
+.value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: #a1a1aa;
+  font-size: 16px;
+  transition: transform 0.15s ease;
+}
+
+.triggerOpen .chevron {
+  transform: rotate(180deg);
+  color: #c4b5fd;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border-radius: 12px;
+  background: #16161a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+  max-height: min(280px, 50vh);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #e4e4e7;
+  padding: 11px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+}
+
+.option:hover,
+.option:focus-visible {
+  background: rgba(141, 108, 252, 0.14);
+  outline: none;
+}
+
+.optionActive {
+  background: rgba(141, 108, 252, 0.18);
+  color: #fff;
+}
+
+.optionLabel {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.radio {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  box-sizing: border-box;
+}
+
+.radioActive {
+  border-color: #8d6cfc;
+  background:
+    radial-gradient(circle at center, #8d6cfc 0 4px, transparent 5px),
+    #121214;
+}
