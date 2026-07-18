@@ -8,6 +8,13 @@ import styles from "./OrdersPage.module.css";
 const SUPPORT_EMAIL = "noteseraa@gmail.com";
 const SUPPORT_WHATSAPP_URL = "https://wa.me/message/GQDCCMOPAY62F1";
 
+function formatModuleLabel(productId = "") {
+  return String(productId)
+    .replace(/[-_]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 const OrdersPage = () => {
   const [modules, setModules] = useState([]);
   const [error, setError] = useState("");
@@ -132,8 +139,8 @@ const OrdersPage = () => {
         <ul className={styles.list}>
           {modules.map((item) => (
             <li key={`${item.productId}-${item.orderId}`} className={styles.item}>
-              <div>
-                <strong>{item.productId}</strong>
+              <div className={styles.itemMeta}>
+                <strong>{formatModuleLabel(item.productId)}</strong>
                 <p>
                   {item.active ? "Active" : "Expired"} · until{" "}
                   {item.expiresAt
