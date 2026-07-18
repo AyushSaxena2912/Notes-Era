@@ -40,10 +40,6 @@
   height: 36px;
   width: auto;
   display: block;
-  filter:
-    brightness(1.12)
-    contrast(1.08)
-    drop-shadow(0 0 4px rgba(141, 108, 252, 0.22));
 }
 
 .nav {
