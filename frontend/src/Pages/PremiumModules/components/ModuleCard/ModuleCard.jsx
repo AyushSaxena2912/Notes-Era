@@ -108,8 +108,10 @@ const ModuleCard = ({
           </div>
 
           <div className={styles.priceBlock}>
-            <span className={styles.price}>₹{price}</span>
-            {oldPrice && oldPrice > price ? (
+            <span className={styles.price}>
+              {price != null ? `₹${price}` : "—"}
+            </span>
+            {oldPrice != null && price != null && oldPrice > price ? (
               <span className={styles.mrp}>₹{oldPrice}</span>
             ) : null}
             {discount > 0 ? (

@@ -335,7 +335,7 @@ const HeroSection = ({ module, className, college }) => {
                   <div className={styles.metaLine}>
                     {college ? <span>{college}</span> : null}
                     {college ? <span className={styles.dotSep}>·</span> : null}
-                    <span>Soft copy</span>
+                    <span>Digital e-Module</span>
                     <span className={styles.dotSep}>·</span>
                     <span>Instant access</span>
                   </div>
@@ -359,8 +359,10 @@ const HeroSection = ({ module, className, college }) => {
                     </p>
                   ) : (
                     <div className={styles.priceRow}>
-                      <span className={styles.price}>₹{price}</span>
-                      {oldPrice > price ? (
+                      <span className={styles.price}>
+                        {price != null ? `₹${price}` : "—"}
+                      </span>
+                      {oldPrice != null && price != null && oldPrice > price ? (
                         <span className={styles.mrp}>₹{oldPrice}</span>
                       ) : null}
                       {discount > 0 ? (

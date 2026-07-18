@@ -96,7 +96,8 @@ const productIdSchema = z
 
 export const createOrderSchema = z.object({
   productId: productIdSchema,
-  type: z.enum(["soft", "hard"]),
+  /** Digital e-module only — hard copy is no longer offered. */
+  type: z.literal("soft").optional().default("soft"),
 });
 
 export const createCartOrderSchema = z.object({

@@ -83,26 +83,17 @@ export function getUniqueValues(items, key) {
   return [...new Set(items.map((item) => item[key]).filter(Boolean))].sort();
 }
 
-const DEFAULT_SOFT = 499;
-const DEFAULT_HARD = 799;
-
 /**
- * Atlas currently has placeholder prices (9–39, often soft===hard).
- * Use sane shop prices when DB values look invalid.
+ * Offer price = softCopyPrice (what checkout charges).
+ * MRP = module.mrp when higher than offer (strikethrough + % off).
  */
 export function resolveModulePrices(module = {}) {
   const soft = Number(module.softCopyPrice);
-  const hard = Number(module.hardCopyPrice);
+  const mrp = Number(module.mrp);
 
-  if (!Number.isFinite(soft) || soft < 99) {
-    return { price: DEFAULT_SOFT, oldPrice: DEFAULT_HARD };
-  }
-
-  const price = soft;
+  const price = Number.isFinite(soft) && soft > 0 ? soft : null;
   const oldPrice =
-    Number.isFinite(hard) && hard > soft
-      ? hard
-      : Math.max(Math.round(soft * 1.45), soft + 100);
+    price != null && Number.isFinite(mrp) && mrp > price ? mrp : null;
 
   return { price, oldPrice };
 }
@@ -167,13 +158,15 @@ export function filterAndSortModules(
     case "price-asc":
       sorted.sort(
         (a, b) =>
-          resolveModulePrices(a).price - resolveModulePrices(b).price,
+          (resolveModulePrices(a).price ?? Number.POSITIVE_INFINITY) -
+          (resolveModulePrices(b).price ?? Number.POSITIVE_INFINITY),
       );
       break;
     case "price-desc":
       sorted.sort(
         (a, b) =>
-          resolveModulePrices(b).price - resolveModulePrices(a).price,
+          (resolveModulePrices(b).price ?? -1) -
+          (resolveModulePrices(a).price ?? -1),
       );
       break;
     case "rating-desc":

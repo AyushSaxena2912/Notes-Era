@@ -11,7 +11,8 @@ type ModulesType = {
   totalRatings: number;
   previews: { previewSrc: string }[];
   softCopyPrice?: number;
-  hardCopyPrice?: number;
+  /** Display MRP (strikethrough); checkout uses softCopyPrice. */
+  mrp?: number;
   description?: string;
   topics?: { title: string; description: string }[];
 };
@@ -38,7 +39,7 @@ const ModuleSchema = new Schema({
   totalRatings: { type: Schema.Types.Number, required: true },
   previews: { type: [PreviewsSchema], required: true },
   softCopyPrice: { type: Schema.Types.Number, required: false },
-  hardCopyPrice: { type: Schema.Types.Number, required: false },
+  mrp: { type: Schema.Types.Number, required: false },
   description: { type: Schema.Types.String, required: false },
   topics: { type: [TopicsSchema], required: false },
 });

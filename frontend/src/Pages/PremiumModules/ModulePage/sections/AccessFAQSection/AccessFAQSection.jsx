@@ -9,7 +9,7 @@ const FAQS = [
   },
   {
     q: "How long will I have access?",
-    a: "You get 6 months of access to the soft copy. Use the link from your email or open it from your Orders list whenever you need during this period.",
+    a: "You get 6 months of access to the digital e-Module. Use the link from your email or open it from your Orders list whenever you need during this period.",
   },
   {
     q: "Payment went through, but I still don’t have access. What should I do?",

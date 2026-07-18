@@ -63,7 +63,7 @@ const createGatewayOrder = async ({
   req: Request;
   amountRupees: number;
   orderIdSeed: string;
-  type: "soft" | "hard";
+  type: "soft";
   productId?: string;
   productIds?: string[];
   description: string;
@@ -157,7 +157,8 @@ const createNewOrder = async (
       });
     }
 
-    const { productId, type } = parsed.data;
+    const { productId } = parsed.data;
+    const type = "soft" as const;
 
     const alreadyOwned = await getAlreadyOwnedProductIds(req.user.id, [
       productId,
@@ -171,8 +172,8 @@ const createNewOrder = async (
       });
     }
 
-    const { softCopyPrice, hardCopyPrice } = await getAmount(productId);
-    const amountRupees = type === "soft" ? softCopyPrice : hardCopyPrice;
+    const { softCopyPrice } = await getAmount(productId);
+    const amountRupees = softCopyPrice;
 
     if (!amountRupees || amountRupees <= 0) {
       return res.status(400).json({
@@ -188,7 +189,7 @@ const createNewOrder = async (
       orderIdSeed: productId,
       type,
       productId,
-      description: `Order of ${productId} ${type}Copy.`,
+      description: `Order of ${productId} e-Module.`,
     });
 
     return res.json(payload);
@@ -338,41 +339,35 @@ const fulfillPurchase = async ({
     );
     if (existing && isPurchaseActive(existing)) {
       // Already owned (e.g. race / double verify) — still ensure Drive share.
-      if (decodedToken.type === "soft") {
-        const fileId = await getFileId(productId);
-        if (fileId) {
-          try {
-            await addPermission(buyerEmail, fileId);
-          } catch (err) {
-            console.warn(
-              `Drive share failed for owned ${productId} (${fileId}).`,
-              err,
-            );
-          }
-        }
-      }
-      continue;
-    }
-
-    if (decodedToken.type === "soft") {
       const fileId = await getFileId(productId);
       if (fileId) {
         try {
           await addPermission(buyerEmail, fileId);
         } catch (err) {
-          // Paid order should still succeed; Drive share can be fixed later.
           console.warn(
-            `Drive share failed for ${productId} (${fileId}). Purchase will still be saved.`,
+            `Drive share failed for owned ${productId} (${fileId}).`,
             err,
           );
         }
-      } else {
+      }
+      continue;
+    }
+
+    const fileId = await getFileId(productId);
+    if (fileId) {
+      try {
+        await addPermission(buyerEmail, fileId);
+      } catch (err) {
+        // Paid order should still succeed; Drive share can be fixed later.
         console.warn(
-          `No Drive fileId for ${productId} — purchase will still be saved.`,
+          `Drive share failed for ${productId} (${fileId}). Purchase will still be saved.`,
+          err,
         );
       }
     } else {
-      console.log(`${buyerName} bought ${productId} hard copy.`);
+      console.warn(
+        `No Drive fileId for ${productId} — purchase will still be saved.`,
+      );
     }
 
     await addModulePurchase({
@@ -385,7 +380,7 @@ const fulfillPurchase = async ({
       orderId,
       paymentId,
       signature,
-      purchaseType: decodedToken.type,
+      purchaseType: "soft",
     });
   }
 

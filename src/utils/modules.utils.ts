@@ -14,13 +14,9 @@ const getModulesByRepoId = async (
 };
 
 const getAmount = async (slug: string) => {
-  const result = await Modules.findOne(
-    { slug: slug },
-    { softCopyPrice: 1, hardCopyPrice: 1 },
-  );
+  const result = await Modules.findOne({ slug: slug }, { softCopyPrice: 1 });
   return {
     softCopyPrice: result?.softCopyPrice,
-    hardCopyPrice: result?.hardCopyPrice,
   };
 };
 

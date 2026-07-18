@@ -2,7 +2,7 @@ import { verifyJWT } from "./utils";
 
 interface OrderTokenType {
   orderId: string;
-  type: "soft" | "hard";
+  type: "soft";
   /** Single-module checkout */
   productId?: string;
   /** Cart checkout (one or more modules) */

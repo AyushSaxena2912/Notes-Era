@@ -37,7 +37,9 @@ const ModuleSection = ({
                   /\s*[-–—]?\s*Available in Hard Copy and Soft Copy Formats\.?/gi,
                   "",
                 )
-                .replace(/Soft Copy/gi, "")
+                .replace(/\bHard Copy\b/gi, "")
+                .replace(/\bSoft Copy\b/gi, "")
+                .replace(/\s*[,/|&]+\s*$/g, "")
                 .replace(/\s{2,}/g, " ")
                 .trim()
             : null}
