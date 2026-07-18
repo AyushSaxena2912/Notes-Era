@@ -4,7 +4,7 @@ import { ModulesType } from "../models/modules.model";
 import { ReposType } from "../models/repos.model";
 
 interface PayloadType {
-  [key: string]: string | number;
+  [key: string]: string | number | boolean | string[] | undefined;
 }
 
 const bindModulesToRepo = (repo: ReposType, modules: ModulesType[]) => ({
