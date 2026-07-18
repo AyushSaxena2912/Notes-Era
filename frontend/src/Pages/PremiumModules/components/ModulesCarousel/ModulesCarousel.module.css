@@ -57,6 +57,8 @@
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
   scrollbar-width: none;
   padding: 2px 0 6px;
 }
@@ -89,7 +91,9 @@
   }
 
   .track {
-    grid-auto-columns: 85%;
+    /* 2 cards per view on mobile — swipe/arrows for the rest */
+    grid-auto-columns: calc((100% - 14px) / 2);
+    gap: 14px;
   }
 
   .navBtn {

@@ -51,18 +51,10 @@ const SubjectBlock = ({ subject, modules, bestSellerOffset = false }) => {
     renderModuleCard(module, index, bestSellerOffset && index === 0),
   );
 
-  if (modules.length > 4) {
-    return (
-      <div className={styles.subjectBlock}>
-        <ModulesCarousel header={header}>{cards}</ModulesCarousel>
-      </div>
-    );
-  }
-
+  // Always carousel so mobile shows 2 cards + swipe/arrows for the rest
   return (
     <div className={styles.subjectBlock}>
-      {header}
-      <div className={styles.grid}>{cards}</div>
+      <ModulesCarousel header={header}>{cards}</ModulesCarousel>
     </div>
   );
 };

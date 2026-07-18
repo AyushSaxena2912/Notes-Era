@@ -44,8 +44,9 @@ const ModulesCarousel = ({ header, children }) => {
   const scrollByDir = (dir) => {
     const el = trackRef.current;
     if (!el) return;
+    // Scroll roughly one “page” (2 cards on mobile, more on desktop)
     el.scrollBy({
-      left: dir * Math.max(el.clientWidth * 0.85, 260),
+      left: dir * Math.max(el.clientWidth * 0.92, 220),
       behavior: "smooth",
     });
   };

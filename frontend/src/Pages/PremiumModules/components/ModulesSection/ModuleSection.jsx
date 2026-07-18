@@ -25,10 +25,6 @@ const ModuleSection = ({
 
   if (!sectionModules.length) return null;
 
-  // Related modules should always use the carousel (most repos have ≤4 units,
-  // so a "> 4" threshold never fired after filtering out the current module).
-  const useCarousel = isRelatedMods || sectionModules.length > 4;
-
   const header = (
     <div className={styles.headerText}>
       <h2>{name}</h2>
@@ -70,18 +66,9 @@ const ModuleSection = ({
     );
   });
 
-  if (useCarousel) {
-    return (
-      <div className={styles.section}>
-        <ModulesCarousel header={header}>{cards}</ModulesCarousel>
-      </div>
-    );
-  }
-
   return (
     <div className={styles.section}>
-      <header className={styles.header}>{header}</header>
-      <div className={styles.grid}>{cards}</div>
+      <ModulesCarousel header={header}>{cards}</ModulesCarousel>
     </div>
   );
 };
