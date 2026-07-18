@@ -26,6 +26,22 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/", (_req, res) => {
+  res.status(200).json({
+    ok: true,
+    service: "Notes-Era API",
+    health: "/health",
+    docs: {
+      modules: "/api/modules",
+      auth: "/api/auth/meta",
+    },
+  });
+});
+
+app.get("/health", (_req, res) => {
+  res.status(200).json({ ok: true, status: "up" });
+});
+
 app.use("/api/auth", authRouter);
 app.use("/api/access", accessRouter);
 app.use("/api/free-notes", freeNotesRouter);
