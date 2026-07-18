@@ -21,7 +21,7 @@
 
 .eyebrow {
   margin: 0 0 8px;
-  color: #c084fc;
+  color: #8D6CFC;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -101,7 +101,7 @@
 
 .input:focus,
 .select:focus {
-  border-color: rgba(168, 85, 247, 0.7);
+  border-color: rgba(141, 108, 252, 0.7);
 }
 
 .row {
@@ -134,7 +134,7 @@
 }
 
 .primary {
-  background: #8b5cf6;
+  background: #8D6CFC;
   color: #fff;
 }
 
@@ -144,7 +144,7 @@
 }
 
 .primary:hover:not(:disabled) {
-  background: #7c3aed;
+  background: #6F48E8;
 }
 
 .danger {

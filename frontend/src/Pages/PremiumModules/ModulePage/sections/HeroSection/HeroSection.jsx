@@ -188,7 +188,7 @@ const HeroSection = ({ module, className, college }) => {
             : undefined,
         },
         notes: { ...buyer, purchaseType: "soft", id: module.slug },
-        theme: { color: "#8b5cf6" },
+        theme: { color: "#8D6CFC" },
         handler: async ({
           razorpay_order_id,
           razorpay_payment_id,

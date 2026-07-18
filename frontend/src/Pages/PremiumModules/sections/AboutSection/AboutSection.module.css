@@ -27,7 +27,7 @@
 .eyebrow {
   margin: 0 !important;
   width: auto !important;
-  color: #c084fc !important;
+  color: #8D6CFC !important;
   font-size: 12px !important;
   font-weight: 700 !important;
   letter-spacing: 0.14em;
@@ -88,7 +88,7 @@
   height: 112px;
   padding: 3px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #e9d5ff, #a855f7 50%, #7c3aed);
+  background: linear-gradient(145deg, #E4DCFF, #8D6CFC 50%, #6F48E8);
   margin-bottom: 6px;
 }
 
@@ -117,7 +117,7 @@
 .role {
   margin: 0 !important;
   width: auto !important;
-  color: #c084fc !important;
+  color: #8D6CFC !important;
   font-size: 13px !important;
   font-weight: 600 !important;
   text-align: center !important;
@@ -174,8 +174,8 @@
 
 .copyBtn:hover {
   color: #fff;
-  border-color: rgba(168, 85, 247, 0.4);
-  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(141, 108, 252, 0.4);
+  background: rgba(141, 108, 252, 0.1);
 }
 
 .socials {
@@ -194,10 +194,10 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid rgba(168, 85, 247, 0.35);
+  border: 1px solid rgba(141, 108, 252, 0.35);
   border-radius: 999px;
-  background: rgba(168, 85, 247, 0.1);
-  color: #e9d5ff;
+  background: rgba(141, 108, 252, 0.1);
+  color: #E4DCFF;
   text-decoration: none;
   font-size: 12px;
   font-weight: 600;
@@ -206,8 +206,8 @@
 }
 
 .socialLink:hover {
-  background: rgba(168, 85, 247, 0.2);
-  border-color: rgba(168, 85, 247, 0.55);
+  background: rgba(141, 108, 252, 0.2);
+  border-color: rgba(141, 108, 252, 0.55);
   color: #ffffff;
 }
 
@@ -226,11 +226,11 @@
   flex-direction: column;
   gap: 16px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(168, 85, 247, 0.45) transparent;
+  scrollbar-color: rgba(141, 108, 252, 0.45) transparent;
 }
 
 .scroll:focus-visible {
-  outline: 1px solid rgba(168, 85, 247, 0.4);
+  outline: 1px solid rgba(141, 108, 252, 0.4);
   outline-offset: -2px;
 }
 
@@ -239,7 +239,7 @@
 }
 
 .scroll::-webkit-scrollbar-thumb {
-  background: rgba(168, 85, 247, 0.4);
+  background: rgba(141, 108, 252, 0.4);
   border-radius: 999px;
 }
 
@@ -264,12 +264,12 @@
 }
 
 .person {
-  color: #c084fc;
+  color: #8D6CFC;
   font-weight: 600;
 }
 
 .catchy {
-  color: #c084fc;
+  color: #8D6CFC;
   font-weight: 600;
 }
 

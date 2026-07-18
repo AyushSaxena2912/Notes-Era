@@ -29,10 +29,9 @@
   width: auto;
   display: block;
   filter:
-    brightness(1.28)
-    contrast(1.18)
-    drop-shadow(0 0 14px rgba(192, 132, 252, 0.5))
-    drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
+    brightness(1.12)
+    contrast(1.08)
+    drop-shadow(0 0 4px rgba(141, 108, 252, 0.22));
 }
 
 .tagline {
@@ -83,7 +82,7 @@
 }
 
 .col a:hover {
-  color: #c084fc;
+  color: #8D6CFC;
 }
 
 @media screen and (max-width: 989px) {

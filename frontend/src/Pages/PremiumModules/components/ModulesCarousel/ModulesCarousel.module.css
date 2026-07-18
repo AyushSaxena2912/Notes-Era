@@ -28,8 +28,8 @@
   width: 40px;
   height: 40px;
   border-radius: 999px;
-  border: 1px solid rgba(168, 85, 247, 0.5);
-  background: rgba(139, 92, 246, 0.22);
+  border: 1px solid rgba(141, 108, 252, 0.5);
+  background: rgba(141, 108, 252, 0.22);
   color: #f4f4f5;
   display: grid;
   place-items: center;
@@ -38,8 +38,8 @@
 }
 
 .navBtn:hover:not(:disabled) {
-  background: rgba(139, 92, 246, 0.38);
-  border-color: #a855f7;
+  background: rgba(141, 108, 252, 0.38);
+  border-color: #8D6CFC;
 }
 
 .navBtn:disabled {

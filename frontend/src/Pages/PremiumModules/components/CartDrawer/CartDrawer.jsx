@@ -182,7 +182,7 @@ const CartDrawer = ({ open, onClose }) => {
             ? `+91${buyer.contactNumber.slice(-10)}`
             : undefined,
         },
-        theme: { color: "#8b5cf6" },
+        theme: { color: "#8D6CFC" },
         handler: async ({
           razorpay_order_id,
           razorpay_payment_id,

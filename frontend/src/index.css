@@ -13,17 +13,17 @@ body {
   background-image:
     radial-gradient(
       ellipse 70% 55% at 85% 20%,
-      rgba(124, 58, 237, 0.22),
+      rgba(141, 108, 252, 0.22),
       transparent 55%
     ),
     radial-gradient(
       ellipse 55% 45% at 10% 75%,
-      rgba(88, 28, 135, 0.16),
+      rgba(80, 50, 180, 0.16),
       transparent 50%
     ),
     radial-gradient(
       ellipse 40% 35% at 50% 50%,
-      rgba(168, 85, 247, 0.06),
+      rgba(141, 108, 252, 0.06),
       transparent 60%
     );
   background-attachment: fixed;

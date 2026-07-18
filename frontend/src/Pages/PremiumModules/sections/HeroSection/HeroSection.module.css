@@ -1,8 +1,8 @@
 .hero {
   --ink: #f4f4f5;
   --muted: #a1a1aa;
-  --accent: #a855f7;
-  --accent-soft: #c084fc;
+  --accent: #8D6CFC;
+  --accent-soft: #8D6CFC;
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -119,9 +119,9 @@
   padding: 10px 20px !important;
   border-radius: 999px;
   background: rgba(24, 16, 40, 0.9);
-  border: 1px solid rgba(168, 85, 247, 0.7);
-  box-shadow: 0 0 8px rgba(168, 85, 247, 0.12);
-  color: #e9d5ff !important;
+  border: 1px solid rgba(141, 108, 252, 0.7);
+  box-shadow: 0 0 8px rgba(141, 108, 252, 0.12);
+  color: #E4DCFF !important;
   font-size: 13px !important;
   font-weight: 600 !important;
   letter-spacing: 0.01em;
@@ -130,7 +130,7 @@
 }
 
 .badgeStar {
-  color: #e9d5ff;
+  color: #E4DCFF;
   font-size: 12px;
   line-height: 1;
   flex-shrink: 0;
@@ -151,7 +151,7 @@
 }
 
 .accentWord {
-  background: linear-gradient(90deg, #c084fc 0%, #a855f7 40%, #60a5fa 100%);
+  background: linear-gradient(90deg, #8D6CFC 0%, #8D6CFC 40%, #60a5fa 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -239,15 +239,15 @@
 }
 
 .primary {
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  background: linear-gradient(135deg, #6F48E8, #8D6CFC);
   color: #fff;
-  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.28);
+  box-shadow: 0 12px 28px rgba(141, 108, 252, 0.28);
 }
 
 .primary:hover {
   color: #fff;
   transform: translateY(-1px);
-  box-shadow: 0 16px 34px rgba(124, 58, 237, 0.34);
+  box-shadow: 0 16px 34px rgba(141, 108, 252, 0.34);
 }
 
 .lottieWrap {
@@ -276,8 +276,8 @@
   background:
     radial-gradient(
       circle,
-      rgba(168, 85, 247, 0.45) 0%,
-      rgba(124, 58, 237, 0.22) 38%,
+      rgba(141, 108, 252, 0.45) 0%,
+      rgba(141, 108, 252, 0.22) 38%,
       rgba(96, 165, 250, 0.1) 58%,
       transparent 72%
     );

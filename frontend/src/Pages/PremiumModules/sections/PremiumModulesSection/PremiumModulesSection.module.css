@@ -1,5 +1,5 @@
 .container {
-  --heading-1-color: #c084fc;
+  --heading-1-color: #8D6CFC;
   margin-bottom: 100px;
   padding-top: 24px;
   scroll-margin-top: 100px;
@@ -54,7 +54,7 @@
 }
 
 .resultsBar strong {
-  color: #c084fc;
+  color: #8D6CFC;
 }
 
 .loadingText,
@@ -80,7 +80,7 @@
 .yearHeading {
   margin: 8px 0 0;
   padding: 2px 0;
-  color: #c084fc !important;
+  color: #8D6CFC !important;
   font-size: clamp(22px, 3vw, 28px) !important;
   font-weight: 700 !important;
   line-height: 1.35 !important;

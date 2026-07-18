@@ -8,7 +8,7 @@
     rgba(255, 255, 255, 0.045),
     rgba(255, 255, 255, 0.015)
   );
-  border: 1px solid rgba(168, 85, 247, 0.14);
+  border: 1px solid rgba(141, 108, 252, 0.14);
   box-shadow:
     0 8px 28px rgba(0, 0, 0, 0.28),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
@@ -22,15 +22,15 @@
 
 .card:hover {
   transform: translateY(-2px);
-  border-color: rgba(168, 85, 247, 0.4);
+  border-color: rgba(141, 108, 252, 0.4);
   background: linear-gradient(
     160deg,
-    rgba(168, 85, 247, 0.1),
+    rgba(141, 108, 252, 0.1),
     rgba(255, 255, 255, 0.02)
   );
   box-shadow:
     0 14px 36px rgba(0, 0, 0, 0.4),
-    0 0 28px rgba(124, 58, 237, 0.14);
+    0 0 28px rgba(141, 108, 252, 0.14);
 }
 
 .header {
@@ -51,8 +51,8 @@
   overflow: hidden;
   color: #fff;
   box-shadow:
-    0 0 0 2px rgba(168, 85, 247, 0.35),
-    0 0 14px rgba(168, 85, 247, 0.25);
+    0 0 0 2px rgba(141, 108, 252, 0.35),
+    0 0 14px rgba(141, 108, 252, 0.25);
 }
 
 .initials {
@@ -110,14 +110,14 @@
   border: none;
   background: none;
   padding: 0;
-  color: #c084fc;
+  color: #8D6CFC;
   font: inherit;
   font-weight: 700;
   cursor: pointer;
 }
 
 .readMore:hover {
-  color: #e9d5ff;
+  color: #E4DCFF;
   text-decoration: underline;
 }
 

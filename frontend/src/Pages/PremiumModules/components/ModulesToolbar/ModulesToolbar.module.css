@@ -40,8 +40,8 @@
 }
 
 .searchInput:focus {
-  border-color: #a855f7;
-  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
+  border-color: #8D6CFC;
+  box-shadow: 0 0 0 2px rgba(141, 108, 252, 0.2);
 }
 
 .clearQuery {
@@ -95,13 +95,13 @@
 }
 
 .field select:focus {
-  border-color: #a855f7;
+  border-color: #8D6CFC;
 }
 
 .reset {
   border: none;
   background: transparent;
-  color: #c084fc;
+  color: #8D6CFC;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;

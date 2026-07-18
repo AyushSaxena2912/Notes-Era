@@ -27,7 +27,7 @@ const ReviewCard = ({ name, role, review, color, avatar }) => {
       <header className={styles.header}>
         <div
           className={styles.avatar}
-          style={{ background: color || "#8b5cf6" }}
+          style={{ background: color || "#8D6CFC" }}
           aria-hidden
         >
           {showPhoto ? (

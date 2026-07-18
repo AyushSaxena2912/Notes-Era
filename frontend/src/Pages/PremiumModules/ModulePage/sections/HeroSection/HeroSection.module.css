@@ -71,12 +71,12 @@
 }
 
 .dot:hover {
-  background: rgba(192, 132, 252, 0.7);
+  background: rgba(141, 108, 252, 0.7);
 }
 
 .dotActive {
   width: 22px;
-  background: #a855f7;
+  background: #8D6CFC;
 }
 
 .mainCol {
@@ -109,7 +109,7 @@
 .eyebrow {
   margin: 0 !important;
   width: auto !important;
-  color: #c084fc !important;
+  color: #8D6CFC !important;
   font-size: 12px !important;
   font-weight: 700 !important;
   letter-spacing: 0.12em;
@@ -148,7 +148,7 @@
 }
 
 .ratingValue {
-  color: #c084fc;
+  color: #8D6CFC;
   font-size: 14px;
   font-weight: 700;
 }
@@ -157,7 +157,7 @@
   display: flex;
   align-items: center;
   gap: 2px;
-  color: #a855f7;
+  color: #8D6CFC;
   font-size: 13px;
 }
 
@@ -206,7 +206,7 @@
 .buyBtn {
   border: none;
   border-radius: 10px;
-  background: #8b5cf6;
+  background: #8D6CFC;
   color: #fff;
   font-size: 15px;
   font-weight: 700;
@@ -216,7 +216,7 @@
 }
 
 .buyBtn:hover {
-  background: #7c3aed;
+  background: #6F48E8;
 }
 
 .sectionBlock {
@@ -378,7 +378,7 @@
   justify-content: center;
   padding: 12px 18px;
   border-radius: 10px;
-  background: #8b5cf6;
+  background: #8D6CFC;
   color: #fff !important;
   font-size: 14px !important;
   font-weight: 700 !important;
@@ -386,7 +386,7 @@
 }
 
 .driveBtn:hover {
-  background: #7c3aed;
+  background: #6F48E8;
   color: #fff !important;
 }
 

@@ -30,10 +30,10 @@
 }
 
 .supportBtn {
-  border: 1px solid rgba(168, 85, 247, 0.45);
+  border: 1px solid rgba(141, 108, 252, 0.45);
   border-radius: 10px;
   background: transparent;
-  color: #c084fc;
+  color: #8D6CFC;
   font-size: 13px;
   font-weight: 700;
   padding: 10px 14px;
@@ -41,8 +41,8 @@
 }
 
 .supportBtn:hover {
-  background: rgba(139, 92, 246, 0.12);
-  color: #e9d5ff;
+  background: rgba(141, 108, 252, 0.12);
+  color: #E4DCFF;
 }
 
 .supportMenu {
@@ -80,7 +80,7 @@
 }
 
 .supportItem:hover {
-  background: rgba(139, 92, 246, 0.12);
+  background: rgba(141, 108, 252, 0.12);
   color: #fff;
 }
 
@@ -93,7 +93,7 @@
 
 .eyebrow {
   margin: 0 0 8px;
-  color: #c084fc;
+  color: #8D6CFC;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -125,7 +125,7 @@
   margin-top: 12px;
   border: none;
   border-radius: 10px;
-  background: #8b5cf6;
+  background: #8D6CFC;
   color: #fff;
   font-weight: 700;
   font-size: 14px;
