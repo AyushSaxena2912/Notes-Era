@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import ModuleCard from "../ModuleCard/ModuleCard";
 import ModulesCarousel from "../ModulesCarousel/ModulesCarousel";
-import {
-  resolveModulePrices,
-  resolveModuleImage,
-} from "../../utils/moduleFilters";
+import { resolveModulePrices } from "../../utils/moduleFilters";
 import styles from "./modulesection.module.css";
 
 const ModuleSection = ({
@@ -55,7 +52,7 @@ const ModuleSection = ({
     return (
       <ModuleCard
         key={module.slug || index}
-        imgSrc={resolveModuleImage(module)}
+        imgSrc="/Assets2/Premium-Modules/module-cover.png"
         link={`/premium-modules/${module.repoId}/${module.slug}`}
         name={module.name}
         about={module.about}

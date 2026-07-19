@@ -21,38 +21,22 @@ import styles from "./HeroSection.module.css";
 import Spinner from "../../../components/Spinner/Spinner";
 import { IoCopy } from "react-icons/io5";
 import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
-import {
-  resolveModulePrices,
-  resolveModuleImage,
-} from "../../../utils/moduleFilters";
+import { resolveModulePrices } from "../../../utils/moduleFilters";
 
 const COVER = "/Assets2/Premium-Modules/module-cover.png";
 
 const formatNewLine = (text = "") => text.replace(/\n/g, "<br />");
 
-function normalizeAssetUrl(src = "") {
-  const raw = String(src).trim();
-  if (!raw) return "";
-  if (raw.startsWith("/Assets2/")) return raw;
-  try {
-    const url = new URL(raw, "https://notesera.in");
-    if (url.pathname.includes("/Assets2/")) return url.pathname;
-  } catch {
-    // ignore
-  }
-  return raw;
-}
-
 function buildSampleSlides(module) {
-  const cover = resolveModuleImage(module);
-  const slides = [cover];
+  const slides = [COVER];
   const previews = Array.isArray(module?.previews) ? module.previews : [];
 
   previews.forEach((item) => {
-    const src = normalizeAssetUrl(item?.previewSrc);
+    const src = item?.previewSrc;
     if (
-      src &&
-      src !== cover &&
+      typeof src === "string" &&
+      src.trim() &&
+      src !== COVER &&
       !slides.includes(src) &&
       !src.includes("undefined") &&
       !src.includes("null")
