@@ -83,6 +83,29 @@ export function getUniqueValues(items, key) {
   return [...new Set(items.map((item) => item[key]).filter(Boolean))].sort();
 }
 
+const DEFAULT_MODULE_COVER = "/Assets2/Premium-Modules/module-cover.png";
+
+/**
+ * Prefer DB thumbnailSrc; rewrite notesera.in / absolute URLs to local /Assets2 paths.
+ */
+export function resolveModuleImage(module = {}) {
+  const raw = String(module.thumbnailSrc || "").trim();
+  if (!raw) return DEFAULT_MODULE_COVER;
+
+  if (raw.startsWith("/Assets2/")) return raw;
+
+  try {
+    const url = new URL(raw, "https://notesera.in");
+    if (url.pathname.includes("/Assets2/")) {
+      return url.pathname;
+    }
+  } catch {
+    // ignore
+  }
+
+  return raw.startsWith("http") ? raw : DEFAULT_MODULE_COVER;
+}
+
 /**
  * Offer price = softCopyPrice (what checkout charges).
  * MRP = module.mrp when higher than offer (strikethrough + % off).

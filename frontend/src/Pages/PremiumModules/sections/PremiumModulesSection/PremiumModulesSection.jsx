@@ -12,6 +12,7 @@ import {
   groupModulesByYear,
   groupModulesBySubject,
   resolveModulePrices,
+  resolveModuleImage,
   YEAR_OPTIONS,
   COLLEGE_OPTIONS,
 } from "../../utils/moduleFilters";
@@ -21,7 +22,7 @@ const renderModuleCard = (module, index, bestSeller) => {
   return (
     <ModuleCard
       key={`${module.repoId}-${module.slug}-${index}`}
-      imgSrc="/Assets2/Premium-Modules/module-cover.png"
+      imgSrc={resolveModuleImage(module)}
       link={`/premium-modules/${module.repoId}/${module.slug}`}
       name={module.name}
       about={module.about}
