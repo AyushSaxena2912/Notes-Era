@@ -87,7 +87,14 @@ const ModuleCard = ({
           {isBestSeller ? (
             <span className={styles.badge}>Bestseller</span>
           ) : null}
-          <img src={coverSrc} alt={`${name} cover`} />
+          <img
+            src={coverSrc}
+            alt={`${name} cover`}
+            onError={(event) => {
+              if (event.currentTarget.src.endsWith(DEFAULT_COVER)) return;
+              event.currentTarget.src = DEFAULT_COVER;
+            }}
+          />
         </div>
       </a>
 

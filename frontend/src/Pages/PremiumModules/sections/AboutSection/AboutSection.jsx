@@ -140,11 +140,9 @@ const AboutSection = () => {
         <div className={styles.shell}>
           <aside className={styles.profile}>
             <div className={styles.avatarRing}>
-              <img
-                className={styles.avatar}
-                src="/Assets2/ayush-about.png"
-                alt="Ayush Saxena"
-              />
+              <div className={styles.avatar} aria-label="Ayush Saxena">
+                AS
+              </div>
             </div>
             <h3 className={styles.name}>Ayush Saxena</h3>
             <p className={styles.role}>Founder · Notes-Era</p>

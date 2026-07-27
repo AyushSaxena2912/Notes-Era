@@ -1,3 +1,5 @@
+import { MODULE_LOCAL_FILES } from "./moduleLocalFiles";
+
 const COLLEGE_PATTERNS = [
   { match: /medi-?caps/i, label: "Medi-Caps University" },
   { match: /ips/i, label: "IPS Academy" },
@@ -84,26 +86,133 @@ export function getUniqueValues(items, key) {
 }
 
 const DEFAULT_MODULE_COVER = "/Assets2/Premium-Modules/module-cover.png";
+const MODULES_ASSET_PREFIX = "/Assets2/Premium-Modules/Modules";
+
+/** Vercel/Linux is case-sensitive — map DB folder names to real public folders. */
+const MODULE_ASSET_FOLDERS = {
+  ad12: "AD12",
+  ad12345: "AD12345",
+  ad5: "AD5",
+  bde12: "BDE12",
+  bde12345: "BDE12345",
+  bde34: "BDE34",
+  bde5: "BDE5",
+  cd: "CD",
+  csf: "CSF",
+  csf12345: "CSF12345",
+  csf5: "CSF5",
+  iot: "IOT",
+  iot12: "IOT12",
+  iot12345: "IOT12345",
+  iot34: "IOT34",
+  iot55: "IOT55",
+  ml12: "ML12",
+  ml12345: "ML12345",
+  ml34: "ML34",
+  ml5: "ML5",
+  py12: "PY12",
+  py345: "PY345",
+  pyoneshot: "PYOneshot",
+  r12: "R12",
+  r5: "R5",
+  rm: "RM",
+  rm12: "RM12",
+  rm25: "RM25",
+  rm5: "RM5",
+  rmoneshot: "RMOneshot",
+  rp: "RP",
+  sc12345: "SC12345",
+  se: "SE",
+  xml: "XML",
+  xml12345: "XML12345",
+};
 
 /**
- * Prefer DB thumbnailSrc; rewrite notesera.in / absolute URLs to local /Assets2 paths.
+ * Convert legacy notesera.in / absolute URLs to local /Assets2 paths
+ * and fix Modules/<folder> casing for production.
  */
-export function resolveModuleImage(module = {}) {
-  const raw = String(module.thumbnailSrc || "").trim();
-  if (!raw) return DEFAULT_MODULE_COVER;
+export function normalizeModuleAssetUrl(src = "") {
+  const raw = String(src || "").trim();
+  if (!raw || raw.includes("undefined") || raw.includes("null")) return "";
 
-  if (raw.startsWith("/Assets2/")) return raw;
-
+  let path = raw;
   try {
-    const url = new URL(raw, "https://notesera.in");
-    if (url.pathname.includes("/Assets2/")) {
-      return url.pathname;
+    if (/^https?:\/\//i.test(raw)) {
+      path = new URL(raw).pathname;
     }
   } catch {
-    // ignore
+    return "";
   }
 
-  return raw.startsWith("http") ? raw : DEFAULT_MODULE_COVER;
+  if (!path.startsWith("/")) path = `/${path}`;
+  if (!path.includes("/Assets2/")) return "";
+
+  // Keep only the /Assets2/... suffix
+  path = path.slice(path.indexOf("/Assets2/"));
+
+  const match = path.match(/^(\/Assets2\/Premium-Modules\/Modules\/)([^/]+)(\/.*)$/i);
+  if (match) {
+    const [, prefix, folder, rest] = match;
+    const fixedFolder = MODULE_ASSET_FOLDERS[folder.toLowerCase()] || folder;
+    path = `${prefix}${fixedFolder}${rest}`;
+  }
+
+  return path;
+}
+
+function extractModuleFolder(moduleOrUrl = {}) {
+  const candidates = [];
+  if (typeof moduleOrUrl === "string") {
+    candidates.push(moduleOrUrl);
+  } else {
+    candidates.push(moduleOrUrl?.thumbnailSrc);
+    const previews = Array.isArray(moduleOrUrl?.previews)
+      ? moduleOrUrl.previews
+      : [];
+    previews.forEach((item) => candidates.push(item?.previewSrc));
+  }
+
+  for (const candidate of candidates) {
+    const path = normalizeModuleAssetUrl(candidate);
+    const match = path.match(/\/Modules\/([^/]+)\//i);
+    if (!match) continue;
+    const folder = match[1];
+    return MODULE_ASSET_FOLDERS[folder.toLowerCase()] || folder;
+  }
+  return "";
+}
+
+function localAssetPaths(folder) {
+  const files = MODULE_LOCAL_FILES[folder];
+  if (!files?.length) return [];
+  return files.map((file) => `${MODULES_ASSET_PREFIX}/${folder}/${file}`);
+}
+
+/**
+ * Prefer real local module assets (case-safe).
+ * Never keep dead notesera.in URLs — they return HTML stubs, not images.
+ */
+export function resolveModuleImage(module = {}) {
+  const folder = extractModuleFolder(module);
+  const localFiles = localAssetPaths(folder);
+  if (localFiles.length) {
+    return (
+      localFiles.find((src) => /\/thumbnail\./i.test(src)) || localFiles[0]
+    );
+  }
+  // Folder known from DB but assets not shipped yet (e.g. PY*)
+  if (folder) return DEFAULT_MODULE_COVER;
+  return (
+    normalizeModuleAssetUrl(module?.thumbnailSrc) || DEFAULT_MODULE_COVER
+  );
+}
+
+/** Thumbnail + preview slides for module purchase / detail page. */
+export function resolveModuleGallery(module = {}) {
+  const folder = extractModuleFolder(module);
+  const localSlides = localAssetPaths(folder);
+  if (localSlides.length) return localSlides;
+  return [resolveModuleImage(module)];
 }
 
 /**

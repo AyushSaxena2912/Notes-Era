@@ -21,31 +21,17 @@ import styles from "./HeroSection.module.css";
 import Spinner from "../../../components/Spinner/Spinner";
 import { IoCopy } from "react-icons/io5";
 import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
-import { resolveModulePrices } from "../../../utils/moduleFilters";
+import {
+  resolveModulePrices,
+  resolveModuleGallery,
+} from "../../../utils/moduleFilters";
 
 const COVER = "/Assets2/Premium-Modules/module-cover.png";
 
 const formatNewLine = (text = "") => text.replace(/\n/g, "<br />");
 
 function buildSampleSlides(module) {
-  const slides = [COVER];
-  const previews = Array.isArray(module?.previews) ? module.previews : [];
-
-  previews.forEach((item) => {
-    const src = item?.previewSrc;
-    if (
-      typeof src === "string" &&
-      src.trim() &&
-      src !== COVER &&
-      !slides.includes(src) &&
-      !src.includes("undefined") &&
-      !src.includes("null")
-    ) {
-      slides.push(src);
-    }
-  });
-
-  return slides;
+  return resolveModuleGallery(module);
 }
 
 const HeroSection = ({ module, className, college }) => {
